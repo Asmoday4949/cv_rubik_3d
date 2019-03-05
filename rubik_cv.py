@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import math
 
 # helper function:
 # finds a cosine of angle between vectors
@@ -9,6 +10,7 @@ def angle(pt1, pt2, pt0):
     dy1 = pt1.y - pt0.y
     dx2 = pt2.x - pt0.x
     dy2 = pt2.y - pt0.y
+    
     return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
 
 # images -> mat
@@ -42,7 +44,7 @@ def findSquares(image, inv = False):
     gray0 = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     gray0 = cv2.GaussianBlur(gray0,(7,7),1.5, 1.5)
 
-    gray = cv2.Canny(gray,0,30,apertureSize = 3)
+    gray = cv2.Canny(gray0,0,30,apertureSize = 3)
 
     # find contours and store them all as a list
     im2, contours, hierarchy = cv2.findContours(gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -60,20 +62,19 @@ def findSquares(image, inv = False):
         # Note: absolute value of an area is used because
         # area may be positive or negative - in accordance with the
         # contour orientation
-        if (count(approx)==4 and fabs(contourArea(Mat(approx))) > 5 and isContourConvex(Mat(approx)) ):
+        if len(approx) == 4 and math.fabs(cv2.contourArea(approx)) > 5 and cv2.isContourConvex(approx):
             maxCosine = 0
 
             for j in range(2,5):
                 # find the maximum cosine of the angle between joint edges
-                cosine = fabs(angle(approx[j%4], approx[j-2], approx[j-1]))
+                cosine = math.fabs(angle(approx[j%4], approx[j-2], approx[j-1]))
                 maxCosine = max(maxCosine, cosine)
 
             # if cosines of all angles are small
             # (all angles are ~90 degree) then write quandrange
             # vertices to resultant sequence
-            if( maxCosine < 0.3 ):
-                squares.push_back(approx)
-
+            if maxCosine < 0.3:
+                squares.append(approx)
 
     return squares
 
@@ -85,10 +86,10 @@ if __name__ == '__main__':
         print("error while opening camera")
         raise e
 
-    while(True):
+    while True:
         ret, frame = cap.read()
 
-        if (frame == None):
+        if frame == None:
             raise Exception(-1)
 
         squares = findSquares(frame)
