@@ -11,7 +11,7 @@ def angle(pt1, pt2, pt0):
     dx2 = pt2[0][0] - pt0[0][0]
     dy2 = pt2[0][1] - pt0[0][1]
 
-    return (dx1*dx2 + dy1*dy2) / np.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
+    return (dx1*dx2 + dy1*dy2) / math.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
 
 # images -> mat
 # squares -> vector<vector<Point>>
@@ -24,11 +24,16 @@ def drawSquares(image, squares):
         x, y, w, h = cv2.boundingRect(square)
         r = np.zeros((h, w, 3), dtype=np.uint8)
 
+        x = x + w//4
+        y = y + w//4
+        w = w//2
+        h = h//2
+
         roi = r
         color = cv2.mean(roi)
         cv2.polylines(image, np.int32([p]), True, color, 2, cv2.LINE_AA, shift)
 
-        cv2.ellipse(image, (w//2, h//2), (w,h), 0, 0, 180, color, 2, cv2.LINE_AA)
+        cv2.ellipse(image, (x+w//2, y+h//2), (w//2,h//2), 0, 0, 360, color, 2, cv2.LINE_AA)
 
 # returns sequence of squares detected on the image.
 # the sequence is stored in the specified memory storage
