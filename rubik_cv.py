@@ -6,12 +6,12 @@ import math
 # finds a cosine of angle between vectors
 # from pt0->pt1 and from pt0->pt2
 def angle(pt1, pt2, pt0):
-    dx1 = pt1.x - pt0.x
-    dy1 = pt1.y - pt0.y
-    dx2 = pt2.x - pt0.x
-    dy2 = pt2.y - pt0.y
-    
-    return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
+    dx1 = pt1[0][0] - pt0[0][0]
+    dy1 = pt1[0][1] - pt0[0][1]
+    dx2 = pt2[0][0] - pt0[0][0]
+    dy2 = pt2[0][1] - pt0[0][1]
+
+    return (dx1*dx2 + dy1*dy2) / np.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
 
 # images -> mat
 # squares -> vector<vector<Point>>
@@ -21,18 +21,14 @@ def drawSquares(image, squares):
         n = len(square)
         shift = 1
 
-        r = cv2.boundingRect(square)
-        r.x = r.x + r.width / 4.
-        r.y = r.y + r.height / 4.
-        r.width = r.width / 2.
-        r.height = r.height / 2.
+        x, y, w, h = cv2.boundingRect(square)
+        r = np.zeros((h, w, 3), dtype=np.uint8)
 
-        roi = cv2.image(r)
+        roi = r
         color = cv2.mean(roi)
-        cv2.polylines(image, p, n, 1, True, color, 2, cv2.LINE_AA, shift)
+        cv2.polylines(image, np.int32([p]), True, color, 2, cv2.LINE_AA, shift)
 
-        cv2.center(r.x + r.width / 2, r.y + r.height / 2)
-        cv2.ellipse(image, center, Size(r.width / 2, r.height / 2), 0, 0, 360, color, 2, cv2.LINE_AA)
+        cv2.ellipse(image, (w//2, h//2), (w,h), 0, 0, 180, color, 2, cv2.LINE_AA)
 
 # returns sequence of squares detected on the image.
 # the sequence is stored in the specified memory storage
@@ -47,7 +43,7 @@ def findSquares(image, inv = False):
     gray = cv2.Canny(gray0,0,30,apertureSize = 3)
 
     # find contours and store them all as a list
-    im2, contours, hierarchy = cv2.findContours(gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
+    contours, hierarchy = cv2.findContours(gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
 
     # test each contour
     for cont in contours:
@@ -89,10 +85,10 @@ if __name__ == '__main__':
     while True:
         ret, frame = cap.read()
 
-        if frame == None:
+        if frame.size == 0:
             raise Exception(-1)
 
         squares = findSquares(frame)
         drawSquares(frame, squares)
         cv2.imshow("Rubic Detection Demo", frame)
-        cv2.WaitKey(1)
+        cv2.waitKey(1)
