@@ -14,29 +14,29 @@ def angle(pt1, pt2, pt0):
 # images -> mat
 # squares -> vector<vector<Point>>
 def drawSquares(image, squares):
-    for i in range(0,count(squares)):
-        p = squares[i][0]
-        n = count(squares[i])
+    for square in squares:
+        p = square[0]
+        n = len(square)
         shift = 1
 
-        r=boundingRect( Mat(squares[i]));
-        r.x = r.x + r.width / 4;
-        r.y = r.y + r.height / 4;
-        r.width = r.width / 2;
-        r.height = r.height / 2;
+        r = cv2.boundingRect(square)
+        r.x = r.x + r.width / 4.
+        r.y = r.y + r.height / 4.
+        r.width = r.width / 2.
+        r.height = r.height / 2.
 
-        roi = image(r);
-        color = mean(roi);
-        polylines(image, p, n, 1, true, color, 2, LINE_AA, shift);
+        roi = cv2.image(r)
+        color = cv2.mean(roi)
+        cv2.polylines(image, p, n, 1, True, color, 2, cv2.LINE_AA, shift)
 
-        center( r.x + r.width/2, r.y + r.height/2 );
-        ellipse( image, center, Size( r.width/2, r.height/2), 0, 0, 360, color, 2, LINE_AA );
+        cv2.center(r.x + r.width / 2, r.y + r.height / 2)
+        cv2.ellipse(image, center, Size(r.width / 2, r.height / 2), 0, 0, 360, color, 2, cv2.LINE_AA)
 
 # returns sequence of squares detected on the image.
 # the sequence is stored in the specified memory storage
 # iamge -> mat
 # inv -> bool
-def findSquares(image, inv=False):
+def findSquares(image, inv = False):
     squares = []
 
     gray0 = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
@@ -46,7 +46,7 @@ def findSquares(image, inv=False):
 
     # find contours and store them all as a list
     im2, contours, hierarchy = cv2.findContours(gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-    
+
     # test each contour
     for cont in contours:
         # approximate contour with accuracy proportional
@@ -73,7 +73,7 @@ def findSquares(image, inv=False):
             # vertices to resultant sequence
             if( maxCosine < 0.3 ):
                 squares.push_back(approx)
-        
+
 
     return squares
 
@@ -90,9 +90,8 @@ if __name__ == '__main__':
 
         if (frame == None):
             raise Exception(-1)
-        
+
         squares = findSquares(frame)
         drawSquares(frame, squares)
         cv2.imshow("Rubic Detection Demo", frame)
         cv2.WaitKey(1)
-    
