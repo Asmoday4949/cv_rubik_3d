@@ -1,5 +1,6 @@
 import numpy as np
 import cv2
+import math
 
 # helper function:
 # finds a cosine of angle between vectors
@@ -14,9 +15,9 @@ def angle(pt1, pt2, pt0):
 # images -> mat
 # squares -> vector<vector<Point>>
 def drawSquares(image, squares):
-    for i in range(0,count(squares)):
+    for i in range(0,len(squares)):
         p = squares[i][0]
-        n = count(squares[i])
+        n = len(squares[i])
         shift = 1
 
         r=boundingRect( Mat(squares[i]));
@@ -42,7 +43,7 @@ def findSquares(image, inv=False):
     gray0 = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     gray0 = cv2.GaussianBlur(gray0,(7,7),1.5, 1.5)
 
-    gray = cv2.Canny(gray,0,30,apertureSize = 3)
+    gray = cv2.Canny(gray0,0,30,apertureSize = 3)
 
     # find contours and store them all as a list
     im2, contours, hierarchy = cv2.findContours(gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -60,20 +61,19 @@ def findSquares(image, inv=False):
         # Note: absolute value of an area is used because
         # area may be positive or negative - in accordance with the
         # contour orientation
-        if (count(approx)==4 and fabs(contourArea(Mat(approx))) > 5 and isContourConvex(Mat(approx)) ):
+        if len(approx)==4 and math.fabs(cv2.contourArea(approx)) > 5 and cv2.isContourConvex(approx):
             maxCosine = 0
 
             for j in range(2,5):
                 # find the maximum cosine of the angle between joint edges
-                cosine = fabs(angle(approx[j%4], approx[j-2], approx[j-1]))
+                cosine = math.fabs(angle(approx[j%4], approx[j-2], approx[j-1]))
                 maxCosine = max(maxCosine, cosine)
 
             # if cosines of all angles are small
             # (all angles are ~90 degree) then write quandrange
             # vertices to resultant sequence
-            if( maxCosine < 0.3 ):
-                squares.push_back(approx)
-        
+            if maxCosine < 0.3:
+                squares.append(approx)
 
     return squares
 
