@@ -1,11 +1,14 @@
-from OpenGL.GL import *
-from OpenGL.GL import shaders
-from vecutils import *
+import struct
+import moderngl
 import pygame
+from pygame.locals import DOUBLEBUF, OPENGL
+from gl_tools import *
 
 class OpenGLApp:
     def __init__(self):
         self.init_screen()
+        self.context = create_context()
+        self.build_triangle()
 
     def init_screen(self):
         pygame.init()
@@ -14,34 +17,22 @@ class OpenGLApp:
         self.running = True
 
     def run(self):
+        context = self.context
         while self.running == True:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
-            self.clear()
+                context.clear(0.0,0.0,0.0)
+            self.vao.render()
             pygame.display.flip()
         pygame.quit()
 
-    def build_triangle():
-        vertices = farray([
-        0.6,0.6,0.0,1.0,
-        -0.6,0.6,0.0,1.0,
-        0.0,-0.6,0.0,1.0,
-        ])
-
-        vertex_buffer = glGenBuffers(1)
-        glBindBuffer(GL_ARRAY_BUFFER, vertex_buffer)
-        glBufferData(GL_ARRAY_BUFFER, ArrayDatatype.arrayByteCount(vertices), vertices, GL_STATIC_DRAW)
-        glBindBuffer(GL_ARRAY_BUFFER, 0)
-
-    def render():
-        glUseProgram(shader_program)
-        glBindVertexArray(vertex_array_object)
-        glBindVertexArray(0)
-        glUseProgram(0)
-
-    def clear(self):
-        glClearColor(1.0,1.0,1.0,1.0)
-        glClear(GL_COLOR_BUFFER_BIT)
+    def build_triangle(self):
+        context = self.context
+        prog = load_shaders(context, './shaders/vertex.shader', './shaders/fragment.shader')
+        vbo = context.buffer(struct.pack('6f', 0.0, 0.8, -0.6, -0.8, 0.6, -0.8))
+        vao = context.simple_vertex_array(prog, vbo, 'vert')
+        self.vbo = vbo
+        self.vao = vao
 
 if __name__ == '__main__':
     app = OpenGLApp()
