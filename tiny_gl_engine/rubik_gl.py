@@ -3,12 +3,13 @@ import moderngl
 import pygame
 from pygame.locals import DOUBLEBUF, OPENGL
 from gl_tools import *
+from primitives.cube import *
 
 class OpenGLApp:
     def __init__(self):
         self.init_screen()
         self.context = create_context()
-        self.build_triangle()
+        self.build_cube()
 
     def init_screen(self):
         pygame.init()
@@ -22,9 +23,15 @@ class OpenGLApp:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
                 context.clear(0.0,0.0,0.0)
-            self.vao.render()
+            self.cube.get_vao().render()
             pygame.display.flip()
         pygame.quit()
+
+    def build_camera():
+        self.camera = Camera()
+
+    def build_cube(self):
+        self.cube = Cube(self.context)
 
     def build_triangle(self):
         context = self.context
