@@ -24,16 +24,27 @@ def drawSquares(image, squares):
         x, y, w, h = cv2.boundingRect(square)
         r = np.zeros((h, w, 3), dtype=np.uint8)
 
-        x = x + w//4
-        y = y + w//4
-        w = w//2
-        h = h//2
+        x = x + w // 4
+        y = y + w // 4
+        w = w // 2
+        h = h // 2
 
         roi = r
         color = cv2.mean(roi)
         cv2.polylines(image, np.int32([p]), True, color, 2, cv2.LINE_AA, shift)
 
         cv2.ellipse(image, (x+w//2, y+h//2), (w//2,h//2), 0, 0, 360, color, 2, cv2.LINE_AA)
+
+def findCorners(image):
+    gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    dst = cv2.cornerHarris(gray, 2, 5, 0.04)
+
+    #result is dilated for marking the corners, not important
+    dst = cv2.dilate(dst, None)
+
+    # Threshold for an optimal value, it may vary depending on the image.
+    image[dst>0.01*dst.max()]=[0,0,255]
+
 
 # returns sequence of squares detected on the image.
 # the sequence is stored in the specified memory storage
@@ -43,9 +54,13 @@ def findSquares(image, inv = False):
     squares = []
 
     gray0 = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-    gray0 = cv2.GaussianBlur(gray0,(7,7),1.5, 1.5)
+    gray0 = cv2.GaussianBlur(gray0, (5,5), 1.5, 1.5)
+
+    cv2.imshow("Gaussian", gray0)
 
     gray = cv2.Canny(gray0,0,30,apertureSize = 3)
+
+    cv2.imshow("Canny", gray)
 
     # find contours and store them all as a list
     contours, hierarchy = cv2.findContours(gray, cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
@@ -55,7 +70,7 @@ def findSquares(image, inv = False):
         # approximate contour with accuracy proportional
         # to the contour perimeter
         # OLD -> approxPolyDP(Mat(contours[i]), approx, 9, true);
-        approx = cv2.approxPolyDP(cont,9,True)
+        approx = cv2.approxPolyDP(cont, 9, True)
 
         # square contours should have 4 vertices after approximation
         # relatively large area (to filter out noisy contours)
@@ -63,7 +78,7 @@ def findSquares(image, inv = False):
         # Note: absolute value of an area is used because
         # area may be positive or negative - in accordance with the
         # contour orientation
-        if len(approx) == 4 and math.fabs(cv2.contourArea(approx)) > 5 and cv2.isContourConvex(approx):
+        if len(approx) == 4 and math.fabs(cv2.contourArea(approx)) > 2 and cv2.isContourConvex(approx):
             maxCosine = 0
 
             for j in range(2,5):
@@ -74,7 +89,7 @@ def findSquares(image, inv = False):
             # if cosines of all angles are small
             # (all angles are ~90 degree) then write quandrange
             # vertices to resultant sequence
-            if maxCosine < 0.3:
+            if maxCosine < 0.5:
                 squares.append(approx)
 
     return squares
@@ -95,5 +110,6 @@ if __name__ == '__main__':
 
         squares = findSquares(frame)
         drawSquares(frame, squares)
+        findCorners(frame)
         cv2.imshow("Rubic Detection Demo", frame)
         cv2.waitKey(1)
