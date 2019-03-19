@@ -14,15 +14,6 @@ def angle(pt1, pt2, pt0):
 
     return (dx1*dx2 + dy1*dy2) / math.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
 
-class color(Enum):
-    RED = auto()
-    GREEN = auto()
-    BLUE = auto()
-    YELLOW = auto()
-    ORANGE = auto()
-    WHITE = auto()
-
-
 
 # images -> mat
 # squares -> vector<vector<Point>>
@@ -45,16 +36,6 @@ def drawSquares(image, squares):
         cv2.polylines(image, np.int32([p]), True, color, 2, cv2.LINE_AA, shift)
 
         cv2.ellipse(image, (x+w//2, y+h//2), (w//2,h//2), 0, 0, 360, color, 2, cv2.LINE_AA)
-
-def detect_color(image):
-    square_zone = ((170, 500), (480, 480)) # x;y -> left corner , w;h
-    result = numpy.full([3,3], -1)
-
-    width_one_square = square_zone[1][0] // 3
-
-    for i in range(0,3):
-        for j in range(0,3):
-            pass
 
 def findCorners(image):
     gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
