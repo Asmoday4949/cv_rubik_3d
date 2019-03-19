@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
 import math
+from enum import Enum, auto
 
 # helper function:
 # finds a cosine of angle between vectors
@@ -12,6 +13,16 @@ def angle(pt1, pt2, pt0):
     dy2 = pt2[0][1] - pt0[0][1]
 
     return (dx1*dx2 + dy1*dy2) / math.sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2) + 1e-10)
+
+class color(Enum):
+    RED = auto()
+    GREEN = auto()
+    BLUE = auto()
+    YELLOW = auto()
+    ORANGE = auto()
+    WHITE = auto()
+
+
 
 # images -> mat
 # squares -> vector<vector<Point>>
@@ -35,6 +46,16 @@ def drawSquares(image, squares):
 
         cv2.ellipse(image, (x+w//2, y+h//2), (w//2,h//2), 0, 0, 360, color, 2, cv2.LINE_AA)
 
+def detect_color(image):
+    square_zone = ((170, 500), (480, 480)) # x;y -> left corner , w;h
+    result = numpy.full([3,3], -1)
+
+    width_one_square = square_zone[1][0] // 3
+
+    for i in range(0,3):
+        for j in range(0,3):
+            pass
+
 def findCorners(image):
     gray = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
     dst = cv2.cornerHarris(gray, 2, 5, 0.04)
@@ -53,12 +74,10 @@ def findCorners(image):
 def findSquares(image, inv = False):
     squares = []
 
-    gray0 = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
-    gray0 = cv2.GaussianBlur(gray0, (5,5), 1.5, 1.5)
+    # gray0 = cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+    gray = cv2.GaussianBlur(image, (7,7), 1.5, 1.5)
 
-    cv2.imshow("Gaussian", gray0)
-
-    gray = cv2.Canny(gray0,0,30,apertureSize = 3)
+    gray = cv2.Canny(image,0,75,apertureSize = 3)
 
     cv2.imshow("Canny", gray)
 
@@ -96,20 +115,24 @@ def findSquares(image, inv = False):
 
 
 if __name__ == '__main__':
-    try:
-        cap = cv2.VideoCapture(0)
-    except Exception as e:
-        print("error while opening camera")
-        raise e
+    # try:
+    #     cap = cv2.VideoCapture(0)
+    # except Exception as e:
+    #     print("error while opening camera")
+    #     raise e
 
-    while True:
-        ret, frame = cap.read()
+    img = cv2.imread('img/01.jpg', cv2.IMREAD_GRAYSCALE)
 
-        if frame.size == 0:
-            raise Exception(-1)
+    # while True:
+    #     ret, frame = cap.read()
+    #
+    #     if frame.size == 0:
+    #         raise Exception(-1)
 
-        squares = findSquares(frame)
-        drawSquares(frame, squares)
-        findCorners(frame)
-        cv2.imshow("Rubic Detection Demo", frame)
-        cv2.waitKey(1)
+    squares = findSquares(img)
+    drawSquares(img, squares)
+    # findCorners(frame)
+    print(squares)
+    cv2.imshow("Rubic Detection Demo", img)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
