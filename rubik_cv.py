@@ -103,6 +103,7 @@ if __name__ == '__main__':
     #     raise e
 
     img = cv2.imread('img/01.jpg', cv2.IMREAD_GRAYSCALE)
+    cv2.imshow("Rubic Detection Demo", img)
 
     # while True:
     #     ret, frame = cap.read()
@@ -110,10 +111,10 @@ if __name__ == '__main__':
     #     if frame.size == 0:
     #         raise Exception(-1)
 
-    squares = findSquares(img)
-    drawSquares(img, squares)
-    # findCorners(frame)
-    print(squares)
-    cv2.imshow("Rubic Detection Demo", img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
+    # squares = findSquares(img)
+    # drawSquares(img, squares)
+    # # findCorners(frame)
+    # print(squares)
+    # cv2.imshow("Rubic Detection Demo", img)
+    # cv2.waitKey(0)
+    # cv2.destroyAllWindows()

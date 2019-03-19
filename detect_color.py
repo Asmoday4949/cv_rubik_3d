@@ -2,12 +2,52 @@ import numpy as np
 import cv2 as cv
 
 def detect_color(image):
-    square_zone = ((170, 500), (480, 480)) # x;y -> left corner , w;h
-    MARGIN = 15
-    result = numpy.full([3,3], -1)
+    square_zone = [[170, 500], 480] # x;y -> left corner , w;h
+    MARGIN = 50
+    result = np.full([3,3], -1)
 
-    width_one_square = square_zone[1][0] // 3
+    width_one_square = square_zone[1] // 3
+
+    sub_zone = [square_zone[0].copy(), width_one_square]
+
+    result = [][]
 
     for i in range(0,3):
+        sub_zone[0][0] = square_zone[0][0]
+
         for j in range(0,3):
-            pass
+            start_width = sub_zone[0][1] + MARGIN
+            end_width = sub_zone[0][1] + sub_zone[1] - MARGIN
+
+            start_height = sub_zone[0][0] + MARGIN
+            end_height = sub_zone[0][0] + sub_zone[1] - MARGIN
+
+            subimage = image[start_width:end_width, start_height:end_height]
+
+            bgr_mean = get_bgr_value_subimage(subimage)
+            result[i][j] = decide_color(bgr_mean)
+
+            cv.imshow(f"{i}:{j}", subimage)
+            sub_zone[0][0] += width_one_square
+
+        sub_zone[0][0] = square_zone[0][0]
+        sub_zone[0][1] += width_one_square
+
+def decide_color(bgr_value):
+    pass
+
+def get_bgr_value_subimage(subimage):
+    bgr_mean = np.empty((3,))
+
+    for i in range(0,3):
+        bgr_mean[i] = subimage[:,:,i].mean()
+
+    return bgr_mean
+
+if __name__ == '__main__':
+    img = cv.imread('img/01.jpg', cv.IMREAD_COLOR)
+    print(img.shape)
+    cv.imshow(f"source", img)
+    detect_color(img)
+    cv.waitKey(0)
+    cv.destroyAllWindows()
