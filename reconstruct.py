@@ -1,5 +1,10 @@
 
 from color_enum import Color
+from pykociemba import tools 
+
+
+def verify(rubik):
+    tools.verify("")
 
 def primary_color_validation(rubik):
     color_angles_counter = {}
@@ -50,11 +55,74 @@ def primary_color_validation(rubik):
         except KeyError:
             raise Exception("Invalid cube detected - during primary validation - center", color_center_counter)
 
+# from kociemba import tools
+import numpy as np
+
+
+def color_to_char(char):
+
+    return data[char]
+
+def cube_to_string(rubik):
+    data = {
+        Color.BLUE: 'U',
+        Color.WHITE: 'F',
+        Color.RED: 'R',
+        Color.GREEN: 'D',
+        Color.YELLOW: 'B',
+        Color.ORANGE: 'L'
+    }
+
+    res = ''.join(map(lambda c: data[c], rubik[Color.BLUE].flatten()))
+    res += ''.join(map(lambda c: data[c], rubik[Color.RED].flatten()))
+    res += ''.join(map(lambda c: data[c], rubik[Color.WHITE].flatten()))
+    res += ''.join(map(lambda c: data[c], rubik[Color.GREEN].flatten()))
+    res += ''.join(map(lambda c: data[c], rubik[Color.ORANGE].flatten()))
+    res += ''.join(map(lambda c: data[c], rubik[Color.YELLOW].flatten()))
+    return res
+
 def reconstruct(rubik):
     # structure int[6][3][3]
+    #          blue
+    # orange | white | red | yellow
+    #          green
+    #
+    
+    faces = {}
+    for face in rubik:
+        faces[face[1][1]] = np.array(face)
+    
 
-    pass
+    for blue in range(0,4):
+        for red in range(0,4):
+            for orange in range(0,4):
+                for green in range(0,4):
+                    for yellow in range(0,4):
+                        cube = cube_to_string(faces)
+                        valid = tools.verify(cube)
+                        if valid == 0:
+                            print("Found it")
+                            print(valid)
+                        faces[Color.YELLOW] = np.rot90(faces[Color.YELLOW])
+                    faces[Color.GREEN] = np.rot90(faces[Color.GREEN])
+                faces[Color.ORANGE] = np.rot90(faces[Color.ORANGE])
+            faces[Color.RED] = np.rot90(faces[Color.RED])
+        faces[Color.BLUE] = np.rot90(faces[Color.BLUE])
 
+
+    # blue_face = faces[Color.BLUE]
+    # orange_face = faces[Color.ORANGE]
+    # white_face = faces[Color.WHITE]
+    # red_face = faces[Color.RED]
+    # yellow_face = faces[Color.YELLOW]
+    # green_face = faces[Color.GREEN]
+
+    cube = cube_to_string(faces)
+    #print(cube)
+    #print(tools.verify(cube))
+    # print(tools.verify(cube))
+
+    
 
 if __name__ == '__main__':
     rubik1 = [ # This is a valid rubik's list of faces
@@ -126,7 +194,7 @@ if __name__ == '__main__':
     rubik3 = [ # Invalid Center changed from green to blue
         [
             [Color.BLUE, Color.GREEN, Color.BLUE],
-            [Color.WHITE, Color.BLUE, Color.BLUE],
+            [Color.WHITE, Color.GREEN, Color.BLUE],
             [Color.YELLOW, Color.GREEN, Color.BLUE]
         ],
         [
@@ -156,6 +224,8 @@ if __name__ == '__main__':
         ],
     ]
 
-    primary_color_validation(rubik1)
-    #primary_color_validation(rubik2)
-    #primary_color_validation(rubik3)
+    # primary_color_validation(rubik1)
+    # primary_color_validation(rubik2)
+    # primary_color_validation(rubik3)
+    reconstruct(rubik3)
+
