@@ -1,12 +1,11 @@
-from numpy import *
 from gl_tools import *
+import numpy
 import pyrr
 import math
 
 class Camera:
     def __init__(self, fov, aspect, near, far):
-        self.prepare_perspective_matrix()
-        #self.prepare_perspective_matrix(fov, aspect, near, far)
+        self.prepare_perspective_matrix(fov, aspect, near, far)
         self.prepare_view_matrix()
 
 
@@ -29,13 +28,9 @@ class Camera:
         self.perspective = (
                             f/aspect, 0.0, 0.0, 0.0,
                             0.0, f, 0.0, 0.0,
-                            0.0, 0.0, (far+near)/(near-far), 2*near*far/(near-far),
-                            0.0, 0.0, -1.0, 0.0,
+                            0.0, 0.0, (far+near)/(near-far), -1.0,
+                            0.0, 0.0, 2*near*far/(near-far), 0.0,
                             )
-
-
-    def prepare_perspective_matrix(self):
-        self.perspective = pyrr.matrix44.create_perspective_projection_matrix(45.0, 1280/720, 0.1, 1000.0)
 
 
     def prepare_view_matrix(self):

@@ -1,5 +1,5 @@
 import moderngl
-import pyrr
+
 
 def create_context():
     return moderngl.create_context()
@@ -38,4 +38,9 @@ def print_matrix(matrix):
 
 
 def get_unit_matrix():
-    return pyrr.Matrix44([[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,0.],[0.,0.,0.,1.]])
+    return (
+            1.0, 0.0, 0.0, 0.0,
+            0.0, 1.0, 0.0, 0.0,
+            0.0, 0.0, 1.0, 0.0,
+            0.0, 0.0, 0.0, 1.0
+            )

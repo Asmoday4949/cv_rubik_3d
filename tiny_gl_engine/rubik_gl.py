@@ -39,21 +39,21 @@ class OpenGLApp:
         prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/triangle_vertex.glsl', 'tiny_gl_engine/primitives/shaders/triangle_fragment.glsl')
         vertices = np.array([
             # x, y, red, green, blue
-            0.0, 1.0, 1.0, 0.0, 0.0,
-            -0.6, 0.0, 0.0, 1.0, 0.0,
-            0.6, 0.0, 0.0, 0.0, 1.0,
+            0.0, 1.0, -3.0, 1.0, 0.0, 0.0,
+            -0.6, 0.0, -3.0, 0.0, 1.0, 0.0,
+            0.6, 0.0, -3.0, 0.0, 0.0, 1.0,
         ])
         self.vbo = context.buffer(vertices.astype('f4').tobytes())
         # We control the 'in_vert' and `in_color' variables
         self.vao = context.simple_vertex_array(prog, self.vbo, 'in_vert', 'in_color')
-        #prog['uPMatrix'].value = camera.get_perspective_matrix()
-        # prog['uVMatrix'].value = camera.get_view_matrix()
-        # prog['uMMatrix'].value = (
-        #         1.0, 0.0, 0.0, 0.0,
-        #         0.0, 1.0, 0.0, 0.0,
-        #         0.0, 0.0, 1.0, 0.0,
-        #         0.0, 0.0, 0.0, 1.0
-        #         )
+        prog['uPMatrix'].value = camera.get_perspective_matrix()
+        prog['uVMatrix'].value = camera.get_view_matrix()
+        prog['uMMatrix'].value = (
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0
+                )
         self.prog = prog
 
     def build_cube(self):
