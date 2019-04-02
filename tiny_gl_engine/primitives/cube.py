@@ -10,24 +10,52 @@ class Cube:
 
 
     def init_arrays(self):
-        self.vertices = [-1.0, -1.0, -1.0,
-                        1.0, -1.0, -1.0,
-                        1.0, 1.0, -1.0,
-                        -1.0, 1.0, -1.0,
-                        # ---------------
-                        -1.0, -1.0, 1.0,
-                        1.0, -1.0, 1.0,
-                        1.0, 1.0, 1.0,
-                        -1.0, 1.0, 1.0,
-                        ]
+        self.full_data = (0.0, 1.0, -3.0,      # Vertex
+                        1.0, 0.0, 0.0, 1.0,     # Color
 
+                        1.0, 0.0, -3.0,
+                        0.0, 1.0, 0.0, 1.0,
+
+                        -1.0, 0.0, -3.0,
+                        0.0, 0.0, 1.0, 1.0,
+
+                        # -1.0, 1.0, -1.0,
+                        # 1.0, 0.0, 0.0, 1.0,
+
+                        # ---------------
+                        # -1.0, -1.0, 1.0,
+                        # 1.0, 0.0, 0.0, 1.0,
+                        #
+                        # 1.0, -1.0, 1.0,
+                        # 1.0, 0.0, 0.0, 1.0,
+                        #
+                        # 1.0, 1.0, 1.0,
+                        # 1.0, 0.0, 0.0, 1.0,
+                        #
+                        # -1.0, 1.0, 1.0,
+                        # 1.0, 0.0, 0.0, 1.0,
+                        )
 
     def init_buffers(self):
         context = self.context
-        self.prog = load_shaders(context, './primitives/shaders/vertex.glsl', './primitives/shaders/fragment.glsl')
-        length = len(self.vertices)
-        self.vbo = context.buffer(struct.pack(str(length) + 'f', *self.vertices))
-        self.vao = context.simple_vertex_array(self.prog, self.vbo, 'vert')
+        self.prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/cube_vertex.glsl', 'tiny_gl_engine/primitives/shaders/cube_fragment.glsl')
+        length = len(self.full_data)
+        self.vbo = context.buffer(struct.pack(str(length) + 'f', *self.full_data))
+        self.vao = context.simple_vertex_array(self.prog, self.vbo, 'aVertex', 'aColor')
+
+
+    def set_prog_parameters(self, model, camera):
+        prog = self.prog
+        print(prog)
+        # https://github.com/moderngl/moderngl/blob/master/examples/02_uniforms_and_attributes.py
+        prog['uPMatrix'].value = camera.get_perspective_matrix()
+        prog['uVMatrix'].value = camera.get_view_matrix()
+        prog['uMMatrix'].value = (
+                1.0, 0.0, 0.0, 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 1.0
+                )
 
 
     def get_prog():

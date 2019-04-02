@@ -1,5 +1,5 @@
 import moderngl
-
+import pyrr
 
 def create_context():
     return moderngl.create_context()
@@ -28,3 +28,14 @@ def load_file_content(filepath):
     content = file.read()
     file.close()
     return content
+
+
+def print_matrix(matrix):
+    for i in range(0,4):
+        for j in range(0,4):
+            print(matrix[i * 4 + j], end=" ")
+        print()
+
+
+def get_unit_matrix():
+    return pyrr.Matrix44([[1.,0.,0.,0.],[0.,1.,0.,0.],[0.,0.,1.,0.],[0.,0.,0.,1.]])
