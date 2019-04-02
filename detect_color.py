@@ -1,10 +1,10 @@
 import numpy as np
 import cv2 as cv
 from color_enum import Color
+import os
 
-def detect_color(image):
-    square_zone = [[170, 500], 480] # x;y -> left corner , w;h
-    MARGIN = 50
+def detect_color(image, square_zone):
+    MARGIN = 20
     result = np.full([3,3], -1)
 
     width_one_square = square_zone[1] // 3
@@ -35,20 +35,32 @@ def detect_color(image):
         sub_zone[0][0] = square_zone[0][0]
         sub_zone[0][1] += width_one_square
 
+
+
     return result
 
+def draw_square(image, zone):
+    color = (0, 0, 0)
+    pt1 = tuple(zone[0])
+    pt2 = (zone[0][0] + zone[1], zone[0][1] + zone[1])
+
+    cv.rectangle(image, pt2, pt1, color, 2)
+    # cv.imshow("square", image)
+
 def decide_color(bgr_value):
+    hsv_value = np.squeeze(np.asarray(cv.cvtColor(np.uint8([[bgr_value]]), cv.COLOR_BGR2HSV)))
+
     if bgr_value.mean() > 150 and np.std(bgr_value) < 40 :
         return Color.WHITE
-    elif bgr_value[0] > 100 and bgr_value[1] < 60 and bgr_value[2] < 60:
+    elif hsv_value[0] > 90 and hsv_value[0] < 110:
         return Color.BLUE
-    elif bgr_value[0] < 60 and bgr_value[1] > 110 and bgr_value[2] < 60:
+    elif hsv_value[0] < 90 and hsv_value[0] > 60:
         return Color.GREEN
-    elif bgr_value[0] > 30 and bgr_value[0] < 60 and bgr_value[1] < 60 and bgr_value[2] > 150:
-        return Color.RED
-    elif bgr_value[0] < 20 and bgr_value[1] > 50 and bgr_value[1] > 100 and bgr_value[2] > 170:
+    elif hsv_value[0] < 30 and hsv_value[0] > 15:
         return Color.YELLOW
-    elif bgr_value[0] < 20 and bgr_value[1] > 50 and bgr_value[1] < 100 and bgr_value[2] > 170:
+    elif hsv_value[0] < 190 and hsv_value[0] > 160:
+        return Color.RED
+    elif hsv_value[0] < 15:
         return Color.ORANGE
 
     return None
@@ -62,9 +74,23 @@ def get_bgr_value_subimage(subimage, math_func):
     return bgr_mean
 
 if __name__ == '__main__':
-    img = cv.imread('img/01.jpg', cv.IMREAD_COLOR)
-    print(img.shape)
-    cv.imshow(f"source", img)
-    print(detect_color(img))
-    cv.waitKey(0)
-    cv.destroyAllWindows()
+    square_zone = [[200, 150], 250]
+
+    try:
+        cap = cv.VideoCapture(0)
+    except Exception as e:
+        print("error while opening camera")
+        raise e
+
+    while True:
+        ret, img = cap.read()
+
+        print(detect_color(img, square_zone))
+        draw_square(img, square_zone)
+        cv.imshow("source", img)
+
+        if img.size == 0:
+            raise Exception(-1)
+
+        if cv.waitKey(1) & 0xFF == ord('q'):
+            break
