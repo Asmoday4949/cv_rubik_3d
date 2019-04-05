@@ -1,6 +1,7 @@
 from gl_tools import *
 import struct
 import numpy
+import pyrr
 
 class Cube:
     def __init__(self, context):
@@ -11,15 +12,15 @@ class Cube:
 
     def init_arrays(self):
         self.vertices = numpy.array([
-                        -1.0, -1.0, -4.0,
-                        1.0, -1.0, -4.0,
-                        1.0, 1.0, -4.0,
-                        -1.0, 1.0, -4.0,
+                        -1.0, -1.0, 1.0,
+                        1.0, -1.0, 1.0,
+                        1.0, 1.0, 1.0,
+                        -1.0, 1.0, 1.0,
                         # --------------
-                        1.0, -1.0, -6.0,
-                        -1.0, -1.0, -6.0,
-                        -1.0, 1.0, -6.0,
-                        1.0, 1.0, -6.0
+                        1.0, -1.0, -1.0,
+                        -1.0, -1.0, -1.0,
+                        -1.0, 1.0, -1.0,
+                        1.0, 1.0, -1.0
                         ])
         self.colors = numpy.array([1.0,0.0,0.0,
                                     1.0,0.0,0.0,
@@ -61,21 +62,16 @@ class Cube:
 
     def set_prog_parameters(self, model, camera):
         prog = self.prog
-        print(prog)
         # https://github.com/moderngl/moderngl/blob/master/examples/02_uniforms_and_attributes.py
         prog['uPMatrix'].value = camera.get_perspective_matrix()
-        prog['uVMatrix'].value = (
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0
-                )
-        prog['uMMatrix'].value = (
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0
-                )
+        prog['uVMatrix'].value = camera.get_view_matrix()
+        prog['uMMatrix'].value = self.get_model()
+
+    def get_model(self):
+        model = pyrr.matrix44.create_from_translation(numpy.array([0.0,0.0,100.0]))
+        model = numpy.transpose(model)
+        print(model)
+        return tuple(model.flatten())
 
 
     def get_prog():
