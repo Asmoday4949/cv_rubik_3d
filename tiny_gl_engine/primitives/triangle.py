@@ -1,6 +1,5 @@
 from gl_tools import *
 import struct
-import glm
 import numpy
 
 class Triangle:

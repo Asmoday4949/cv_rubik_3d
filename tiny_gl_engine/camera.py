@@ -1,6 +1,5 @@
 from gl_tools import *
 import numpy
-import pyrr
 import math
 
 class Camera:
