@@ -5,9 +5,9 @@ uniform mat4 uVMatrix;
 uniform mat4 uPMatrix;
 
 in vec3 aVertex;
-in vec4 aColor;
+in vec3 aColor;
 
-out vec4 vColor;
+out vec3 vColor;
 
 void main()
 {

@@ -5,6 +5,7 @@ import numpy as np
 from pygame.locals import DOUBLEBUF, OPENGL
 from gl_tools import *
 from primitives.cube import *
+from primitives.triangle import *
 from camera import *
 
 class OpenGLApp:
@@ -12,7 +13,7 @@ class OpenGLApp:
         self.init_screen()
         self.context = create_context()
         self.build_camera()
-        self.build_triangle()
+        self.build_cube_object()
 
     def init_screen(self):
         pygame.init()
@@ -22,44 +23,31 @@ class OpenGLApp:
 
     def run(self):
         context = self.context
+        context.enable(moderngl.DEPTH_TEST)
+        context.wireframe = True
         while self.running == True:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
                 context.clear(0.0,0.0,0.0)
-            self.vao.render()
+            self.vao.render(moderngl.TRIANGLES)
             pygame.display.flip()
         pygame.quit()
 
     def build_camera(self):
         self.camera = Camera(70.0, 1.0, 0.1, 1000.0)
 
-    def build_triangle(self):
+    def build_triangle_object(self):
         camera = self.camera
-        context = self.context
-        prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/triangle_vertex.glsl', 'tiny_gl_engine/primitives/shaders/triangle_fragment.glsl')
-        vertices = np.array([
-            # x, y, red, green, blue
-            0.0, 1.0, -3.0, 1.0, 0.0, 0.0,
-            -0.6, 0.0, -3.0, 0.0, 1.0, 0.0,
-            0.6, 0.0, -3.0, 0.0, 0.0, 1.0,
-        ])
-        self.vbo = context.buffer(vertices.astype('f4').tobytes())
-        # We control the 'in_vert' and `in_color' variables
-        self.vao = context.simple_vertex_array(prog, self.vbo, 'in_vert', 'in_color')
-        prog['uPMatrix'].value = camera.get_perspective_matrix()
-        prog['uVMatrix'].value = camera.get_view_matrix()
-        prog['uMMatrix'].value = (
-                1.0, 0.0, 0.0, 0.0,
-                0.0, 1.0, 0.0, 0.0,
-                0.0, 0.0, 1.0, 0.0,
-                0.0, 0.0, 0.0, 1.0
-                )
-        self.prog = prog
+        triangle = Triangle(self.context)
+        triangle.set_prog_parameters(camera.prepare_view_matrix(), camera)
+        self.vao = triangle.get_vao()
+        self.triangle = triangle
 
-    def build_cube(self):
+    def build_cube_object(self):
         camera = self.camera
         cube = Cube(self.context)
         cube.set_prog_parameters(camera.prepare_view_matrix(), camera)
+        self.vao = cube.get_vao()
         self.cube = cube
 
 if __name__ == '__main__':

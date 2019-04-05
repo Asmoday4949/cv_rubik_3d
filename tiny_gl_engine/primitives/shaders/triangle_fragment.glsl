@@ -1,9 +1,11 @@
 #version 310 es
 precision mediump float;
 
-in vec3 v_color;
-out vec4 f_color;
+
+in vec3 vColor;
+out vec4 oColor;
+
 void main() {
     // We're not interested in changing the alpha value
-    f_color = vec4(v_color, 1.0);
+    oColor = vec4(vColor, 1.0);
 }
