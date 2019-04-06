@@ -8,6 +8,7 @@ class Cube:
         self.context = context
         self.init_arrays()
         self.init_buffers()
+        self.prepare_model()
 
 
     def init_arrays(self):
@@ -16,7 +17,6 @@ class Cube:
                         1.0, -1.0, 1.0,
                         1.0, 1.0, 1.0,
                         -1.0, 1.0, 1.0,
-                        # --------------
                         1.0, -1.0, -1.0,
                         -1.0, -1.0, -1.0,
                         -1.0, 1.0, -1.0,
@@ -60,21 +60,17 @@ class Cube:
         self.vao = self.context.vertex_array(self.prog, vao_content, self.ibo)
 
 
-    def set_prog_parameters(self, model, camera):
-        prog = self.prog
+    def set_prog_parameters(self):
         # https://github.com/moderngl/moderngl/blob/master/examples/02_uniforms_and_attributes.py
-        prog['uPMatrix'].value = camera.get_perspective_matrix()
-        prog['uVMatrix'].value = camera.get_view_matrix()
-        prog['uMMatrix'].value = self.get_model()
-
-    def get_model(self):
-        model = pyrr.matrix44.create_from_translation(numpy.array([0.0,0.0,100.0]))
-        model = numpy.transpose(model)
-        print(model)
-        return tuple(model.flatten())
+        self.prog['uMMatrix'].value = self.model
 
 
-    def get_prog():
+    def prepare_model(self):
+        model = pyrr.matrix44.create_from_translation(numpy.array([0.0,0.0,0.0]))
+        self.model = tuple(model.flatten())
+
+
+    def get_prog(self):
         return self.prog
 
 

@@ -29,6 +29,7 @@ class OpenGLApp:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
             context.clear(0.0,0.0,0.0)
+            #self.cube.set_prog_parameters(None, self.camera)
             self.vao.render(moderngl.TRIANGLES)
             pygame.display.flip()
         pygame.quit()
@@ -39,7 +40,8 @@ class OpenGLApp:
     def build_cube_object(self):
         camera = self.camera
         cube = Cube(self.context)
-        cube.set_prog_parameters(None,camera)
+        cube.set_prog_parameters()
+        camera.set_prog_parameters(cube.get_prog())
         self.vao = cube.get_vao()
         self.cube = cube
 

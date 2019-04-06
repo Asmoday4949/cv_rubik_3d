@@ -11,6 +11,6 @@ out vec3 vColor;
 
 void main()
 {
-    gl_Position = uMMatrix * uVMatrix * uPMatrix * vec4(aVertex, 1.0);
+    gl_Position = uPMatrix * uVMatrix * uMMatrix * vec4(aVertex, 1.0);
     vColor = aColor;
 }
