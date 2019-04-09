@@ -30,7 +30,7 @@ def detect_color(image, square_zone):
 
             result[i].append(decide_color(bgr_mean))
 
-            cv.imshow(f"{i}:{j}", subimage)
+            # cv.imshow(f"{i}:{j}", subimage)
             sub_zone[0][0] += width_one_square
 
         sub_zone[0][0] = square_zone[0][0]
@@ -82,9 +82,10 @@ def detect_faces(square_zone):
         if face != None:
             middle = face[1][1]
 
-            if middle not in faces_in:
+            if middle not in faces_in and middle != None:
                 faces_in.add(middle)
                 faces.append(face)
+                print("New face detected", middle)
 
         cv.imshow("source", img)
 

@@ -118,6 +118,8 @@ def reconstruct(rubik):
     # green_face = faces[Color.GREEN]
 
     cube = cube_to_string(faces)
+
+    return cube
     #print(cube)
     #print(tools.verify(cube))
     # print(tools.verify(cube))
