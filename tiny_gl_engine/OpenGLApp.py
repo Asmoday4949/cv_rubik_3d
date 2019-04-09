@@ -5,7 +5,6 @@ import numpy as np
 from pygame.locals import DOUBLEBUF, OPENGL
 from gl_tools import *
 from primitives.cube import *
-from primitives.triangle import *
 from camera import *
 
 class OpenGLApp:
@@ -24,7 +23,7 @@ class OpenGLApp:
     def run(self):
         context = self.context
         context.enable(moderngl.DEPTH_TEST)
-        context.wireframe = True
+        #context.wireframe = True
         while self.running == True:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
