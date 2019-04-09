@@ -5,6 +5,7 @@ import numpy as np
 from pygame.locals import DOUBLEBUF, OPENGL
 from gl_tools import *
 from primitives.cube import *
+from rubiks_cube import *
 from camera import *
 
 class OpenGLApp:
@@ -12,7 +13,7 @@ class OpenGLApp:
         self.init_screen()
         self.context = create_context()
         self.build_camera()
-        self.build_cube_object()
+        self.build_rubiks_cube()
 
     def init_screen(self):
         pygame.init()
@@ -28,13 +29,20 @@ class OpenGLApp:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
             context.clear(0.0,0.0,0.0)
-            #self.cube.set_prog_parameters(None, self.camera)
-            self.vao.render(moderngl.TRIANGLES)
+            self.cube.render(self.camera)
             pygame.display.flip()
         pygame.quit()
 
     def build_camera(self):
         self.camera = Camera(70.0, 1.0, 0.1, 1000.0)
+
+    def build_rubiks_cube(self):
+        camera = self.camera
+        cube = RubiksCube(self.context)
+        cube.set_prog_parameters()
+        camera.set_prog_parameters(cube.get_prog())
+        self.vao = cube.get_vao()
+        self.cube = cube
 
     def build_cube_object(self):
         camera = self.camera

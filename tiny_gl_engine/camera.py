@@ -18,7 +18,7 @@ class Camera:
 
 
     def prepare_view_matrix(self):
-        eye = numpy.array([0.0,3.0,3.0])
+        eye = numpy.array([5.0,5.0,10.0])
         target = numpy.array([0.0,0.0,0.0])
         up = numpy.array([0.0,1.0,0.0])
         view = pyrr.matrix44.create_look_at(eye, target, up)

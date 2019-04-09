@@ -8,7 +8,7 @@ class Cube:
         self.context = context
         self.init_arrays()
         self.init_buffers()
-        self.prepare_model()
+        self.prepare_model(numpy.array([0,0,0]))
 
 
     def init_arrays(self):
@@ -114,8 +114,8 @@ class Cube:
         self.prog['uMMatrix'].value = self.model
 
 
-    def prepare_model(self):
-        model = pyrr.matrix44.create_from_translation(numpy.array([0.0,0.0,0.0]))
+    def prepare_model(self, position):
+        model = pyrr.matrix44.create_from_translation(position)
         self.model = tuple(model.flatten())
 
 
@@ -129,3 +129,7 @@ class Cube:
 
     def get_vbo(self):
         return self.vbo
+
+
+    def render(self):
+        self.vao.render(moderngl.TRIANGLES)
