@@ -103,7 +103,7 @@ def get_bgr_value_subimage(subimage, math_func):
     for i in range(0,3):
         bgr_mean[i] = math_func(subimage[:,:,i])
 
-    grayscale = cv.cvtColor(subimage, cv.COLOR_RGB2GRAY);
+    grayscale = cv.cvtColor(subimage, cv.COLOR_RGB2GRAY)
     deviation = np.std(grayscale)
 
     return bgr_mean, deviation
