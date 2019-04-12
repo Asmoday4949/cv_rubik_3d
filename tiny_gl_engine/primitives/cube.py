@@ -1,4 +1,3 @@
-from gl_tools import *
 import struct
 import numpy
 import pyrr

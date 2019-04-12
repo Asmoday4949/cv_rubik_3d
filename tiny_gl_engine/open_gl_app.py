@@ -3,10 +3,10 @@ import moderngl
 import pygame
 import numpy as np
 from pygame.locals import DOUBLEBUF, OPENGL
-from gl_tools import *
-from primitives.cube import *
-from rubiks_cube import *
-from camera import *
+from tiny_gl_engine.gl_tools import *
+from tiny_gl_engine.primitives.cube import *
+from tiny_gl_engine.rubiks_cube import *
+from tiny_gl_engine.camera import *
 
 class OpenGLApp:
     def __init__(self):

@@ -1,4 +1,4 @@
-from primitives.cube import *
+from tiny_gl_engine.primitives.cube import *
 import numpy
 
 class RubiksCube:
