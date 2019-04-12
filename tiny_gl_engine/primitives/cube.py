@@ -6,10 +6,11 @@ import pyrr
 class Cube:
     def __init__(self, context):
         self.context = context
-        self.init_arrays()
-        self.init_buffers()
-        self.prepare_model(numpy.array([0,0,0]))
+        self.create_model(numpy.array([0,0,0]))
 
+    def create_model(self, position):
+        model = pyrr.matrix44.create_from_translation(position)
+        self.model = tuple(model.flatten())
 
     def init_arrays(self):
         self.vertices = numpy.array([
@@ -94,11 +95,9 @@ class Cube:
         20, 22, 23,
         ])
 
-
     def init_buffers(self):
         # https://github.com/moderngl/moderngl/blob/master/examples/06_index_buffer.py
         context = self.context
-        self.prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/cube_vertex.glsl', 'tiny_gl_engine/primitives/shaders/cube_fragment.glsl')
         self.vbo = self.context.buffer(self.vertices.astype('f4').tobytes())
         self.cbo = self.context.buffer(self.colors.astype('f4').tobytes())
         self.ibo = self.context.buffer(self.indices.astype('i4').tobytes())
@@ -108,28 +107,19 @@ class Cube:
         ]
         self.vao = self.context.vertex_array(self.prog, vao_content, self.ibo)
 
-
-    def set_prog_parameters(self):
-        # https://github.com/moderngl/moderngl/blob/master/examples/02_uniforms_and_attributes.py
+    def apply_model(self):
         self.prog['uMMatrix'].value = self.model
 
+    # -----------------------------------------------
+    # Main methods to call inside the main program
 
-    def prepare_model(self, position):
-        model = pyrr.matrix44.create_from_translation(position)
-        self.model = tuple(model.flatten())
+    def setup_shader(self, prog):
+        self.prog = prog
+        self.apply_model()
 
-
-    def get_prog(self):
-        return self.prog
-
-
-    def get_vao(self):
-        return self.vao
-
-
-    def get_vbo(self):
-        return self.vbo
-
+    def create_geometry(self):
+        self.init_arrays()
+        self.init_buffers()
 
     def render(self):
         self.vao.render(moderngl.TRIANGLES)

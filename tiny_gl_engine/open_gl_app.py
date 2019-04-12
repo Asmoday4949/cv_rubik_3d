@@ -12,6 +12,7 @@ class OpenGLApp:
     def __init__(self):
         self.init_screen()
         self.context = create_context()
+        self.load_shaders()
         self.build_camera()
         self.build_rubiks_cube()
 
@@ -29,27 +30,30 @@ class OpenGLApp:
             for event in pygame.event.get():
                 self.running = not (event.type == pygame.QUIT)
             context.clear(0.0,0.0,0.0)
-            self.cube.render(self.camera)
+            self.cube.render()
             pygame.display.flip()
         pygame.quit()
 
+    def load_shaders(self):
+        context = self.context
+        self.prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/cube_vertex.glsl', 'tiny_gl_engine/primitives/shaders/cube_fragment.glsl')
+
     def build_camera(self):
-        self.camera = Camera(70.0, 1.0, 0.1, 1000.0)
+        camera = Camera(70.0, 1.0, 0.1, 1000.0)
+        camera.setup_shader(self.prog)
+        self.camera = camera
 
     def build_rubiks_cube(self):
-        camera = self.camera
         cube = RubiksCube(self.context)
-        cube.set_prog_parameters()
-        camera.set_prog_parameters(cube.get_prog())
-        self.vao = cube.get_vao()
+        cube.setup_shaders(self.prog)
+        cube.create_geometry()
         self.cube = cube
 
-    def build_cube_object(self):
-        camera = self.camera
+    def build_cube(self):
         cube = Cube(self.context)
-        cube.set_prog_parameters()
-        camera.set_prog_parameters(cube.get_prog())
-        self.vao = cube.get_vao()
+        cube.setup_shader(self.prog)
+        cube.create_geometry()
+        #cube.apply_model()
         self.cube = cube
 
 if __name__ == '__main__':
