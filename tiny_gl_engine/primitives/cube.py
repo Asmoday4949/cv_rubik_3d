@@ -2,15 +2,16 @@ import struct
 import numpy
 import pyrr
 import moderngl
+import math
 
 class Cube:
-    def __init__(self, context):
+    def __init__(self, context, name = ""):
         self.context = context
+        self.name = name
         self.create_model(numpy.array([0,0,0]))
 
     def create_model(self, position):
-        model = pyrr.matrix44.create_from_translation(position)
-        self.model = tuple(model.flatten())
+        self.model = pyrr.matrix44.create_from_translation(position)
 
     def init_arrays(self):
         self.vertices = numpy.array([
@@ -45,10 +46,10 @@ class Cube:
         -1.0, -1.0, -1.0,   # 23
         ])
         self.colors = numpy.array([
-        0.0,1.0,0.0,
-        0.0,1.0,0.0,
-        0.0,1.0,0.0,
-        0.0,1.0,0.0,
+        0.0,0.7,0.0,
+        0.0,0.7,0.0,
+        0.0,0.7,0.0,
+        0.0,0.7,0.0,
 
         1.0,0.0,0.0,
         1.0,0.0,0.0,
@@ -108,7 +109,18 @@ class Cube:
         self.vao = self.context.vertex_array(self.prog, vao_content, self.ibo)
 
     def apply_model(self):
-        self.prog['uMMatrix'].value = self.model
+        self.prog['uMMatrix'].value = tuple(self.model.flatten())
+
+    def rotate(self, axis, clockwise):
+        model = self.model
+        rotation_matrix = pyrr.matrix44.create_from_axis_rotation(axis, math.pi/2)  # Right hand rule => 90 COUNTER CLOCKWISE !
+        self.model = pyrr.matrix44.multiply(self.model, rotation_matrix)
+
+    def __str__(self):
+        return self.name
+
+    def _repr__(self):
+        self.__str__()
 
     # -----------------------------------------------
     # Main methods to call inside the main program
