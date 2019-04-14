@@ -113,7 +113,10 @@ class Cube:
 
     def rotate(self, axis, clockwise):
         model = self.model
-        rotation_matrix = pyrr.matrix44.create_from_axis_rotation(axis, math.pi/2)  # Right hand rule => 90 COUNTER CLOCKWISE !
+        rotation_sign = 1
+        if clockwise:
+            rotation_sign = -1
+        rotation_matrix = pyrr.matrix44.create_from_axis_rotation(axis, rotation_sign * math.pi/2)  # Right hand rule => 90 COUNTER CLOCKWISE !
         self.model = pyrr.matrix44.multiply(self.model, rotation_matrix)
 
     def __str__(self):

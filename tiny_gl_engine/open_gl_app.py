@@ -21,12 +21,13 @@ class OpenGLApp:
     def init_screen(self):
         pygame.init()
         self.size = [500,500]
-        pygame.display.set_mode(self.size, pygame.OPENGL | pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode(self.size, pygame.OPENGL | pygame.DOUBLEBUF)
         self.running = True
 
     def run(self):
         context = self.context
         context.enable(moderngl.DEPTH_TEST)
+        #context.wireframe = True
         cube = self.cube
         while self.running == True:
             for event in pygame.event.get():
@@ -35,6 +36,7 @@ class OpenGLApp:
             cube.render()
             pygame.display.flip()
         pygame.quit()
+
 
     def keys_init(self):
         self.SPEED = 10
@@ -49,12 +51,18 @@ class OpenGLApp:
         if event.type == KEYDOWN:
             self.running = not (event.key == K_q)
             cube.print()
-            if event.key == K_w:
-                cube.rotate_x(2,1)
-            if event.key == K_s:
-                cube.rotate_y(2,1)
-            if event.key == K_y:
-                cube.rotate_z(2,1)
+            if event.key == K_f:
+                cube.rotate_x(2,False)
+            if event.key == K_g:
+                cube.rotate_y(2,False)
+            if event.key == K_h:
+                cube.rotate_z(2,False)
+            if event.key == K_c:
+                cube.rotate_x(2,True)
+            if event.key == K_v:
+                cube.rotate_y(2,True)
+            if event.key == K_b:
+                cube.rotate_z(2,True)
         if event.type == MOUSEBUTTONDOWN:
             self.mouse_pressed = True
             self.start_pos = event.pos
