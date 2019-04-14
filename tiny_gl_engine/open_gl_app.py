@@ -19,10 +19,11 @@ class OpenGLApp:
         self.build_rubiks_cube()
 
     def init_screen(self):
-        pygame.init()
         self.size = [500,500]
-        self.screen = pygame.display.set_mode(self.size, pygame.OPENGL | pygame.DOUBLEBUF)
         self.running = True
+        pygame.init()
+        pygame.display.set_caption('Rubik\'s Cube')
+        self.screen = pygame.display.set_mode(self.size, pygame.OPENGL | pygame.DOUBLEBUF)
 
     def run(self):
         context = self.context
@@ -36,7 +37,6 @@ class OpenGLApp:
             cube.render()
             pygame.display.flip()
         pygame.quit()
-
 
     def keys_init(self):
         self.SPEED = 10
