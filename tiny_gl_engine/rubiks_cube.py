@@ -60,7 +60,6 @@ class RubiksCube:
 
     def rotate_y(self, layer, clockwise):
         array = self.array
-        self.print()
         for x in range(0, self.n):
             for z in range(0, self.n):
                 cube = array[x][layer][z]
