@@ -158,73 +158,7 @@ def filter_lines(lines):
     return lines_filter
 
 
-
 from hough import draw_lines, rhotheta
-
-def filter_lines_two(lines):
-    angles = []
-
-    def approx_angle(theta):
-        deg = theta * 180 / math.pi - 2
-        # TODO Improve
-        deg = int(deg)
-        deg = deg - deg % 2
-
-        while deg > 90:
-            deg = deg - 90
-        while deg < 0:
-            deg = deg + 90
-        
-        return deg
-
-    for line in lines:
-        line_rotheta = rhotheta(line)
-
-        for r,theta in line_rotheta:
-            angles.append(approx_angle(theta))
-
-    # print(angles)
-    data = Counter(angles) 
-    get_mode = dict(data) 
-    mode_angle = [k for k, v in get_mode.items() if v == max(list(data.values()))] 
-    
-    # print("Mode angle : "+str(mode_angle))
-
-    def get_theta(line):
-        for r, theta in line:
-            return theta
-
-    def filter_line(line):
-        rothetaline = rhotheta(line)
-        for r, theta in rothetaline:
-            return approx_angle(theta) == mode_angle[0]
-
-
-
-    lines_filter = list(filter(filter_line,lines))
-
-
-def detect_lines_two(img):
-
-    img2 = img.copy()
-
-    # Read image 
-    # Convert the image to gray-scale
-    gray = cv.cvtColor(img2, cv.COLOR_BGR2GRAY)
-    # Find the edges in the image using canny detector
-
-    edges = cv.Canny(gray, 50, 200)
-    # Detect points that form a line
-    lines = cv.HoughLinesP(edges, 1, np.pi/180, 50, minLineLength=10, maxLineGap=250)
-    
-    lines = filter_lines_two(lines)
-    # Draw lines on the image
-    for line in lines:
-        x1, y1, x2, y2 = line[0]
-        cv.line(img2, (x1, y1), (x2, y2), (255, 0, 0), 3)
-    # Show result
-    cv.imshow("Result Image", img2)
-
 
 
 def find_intersects(lines):
@@ -243,8 +177,6 @@ def detect_lines(img):
     lines = filter_lines(lines)
 
     find_intersects(lines)
-
-
 
     if not lines is None:
 
