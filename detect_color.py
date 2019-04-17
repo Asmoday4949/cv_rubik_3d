@@ -6,11 +6,8 @@ import os
 def detect_color(image, square_zone):
     MARGIN = 20
     result = np.full([3,3], -1)
-
     width_one_square = square_zone[1] // 3
-
     sub_zone = [square_zone[0].copy(), width_one_square]
-
     result = []
 
     for i in range(0,3):
@@ -26,16 +23,18 @@ def detect_color(image, square_zone):
 
             subimage = image[start_width:end_width, start_height:end_height]
 
-            bgr_mean = get_bgr_value_subimage(subimage, np.mean)
+            bgr_mean, deviation = get_bgr_value_subimage(subimage, np.mean)
+
+            if deviation > 10:
+                return None
+
             result[i].append(decide_color(bgr_mean))
 
-            cv.imshow(f"{i}:{j}", subimage)
+            # cv.imshow(f"{i}:{j}", subimage)
             sub_zone[0][0] += width_one_square
 
         sub_zone[0][0] = square_zone[0][0]
         sub_zone[0][1] += width_one_square
-
-
 
     return result
 
@@ -45,7 +44,6 @@ def draw_square(image, zone):
     pt2 = (zone[0][0] + zone[1], zone[0][1] + zone[1])
 
     cv.rectangle(image, pt2, pt1, color, 2)
-    # cv.imshow("square", image)
 
 def decide_color(bgr_value):
     hsv_value = np.squeeze(np.asarray(cv.cvtColor(np.uint8([[bgr_value]]), cv.COLOR_BGR2HSV)))
@@ -65,16 +63,9 @@ def decide_color(bgr_value):
 
     return None
 
-def get_bgr_value_subimage(subimage, math_func):
-    bgr_mean = np.empty((3,))
-
-    for i in range(0,3):
-        bgr_mean[i] = math_func(subimage[:,:,i])
-
-    return bgr_mean
-
-if __name__ == '__main__':
-    square_zone = [[200, 150], 250]
+def detect_faces(square_zone):
+    faces = []
+    faces_in = set()
 
     try:
         cap = cv.VideoCapture(0)
@@ -82,15 +73,42 @@ if __name__ == '__main__':
         print("error while opening camera")
         raise e
 
-    while True:
+    while len(faces_in) < 6:
         ret, img = cap.read()
 
-        print(detect_color(img, square_zone))
         draw_square(img, square_zone)
+        face = detect_color(img, square_zone)
+
+        if face != None:
+            middle = face[1][1]
+
+            if middle not in faces_in and middle != None:
+                faces_in.add(middle)
+                faces.append(face)
+                print("New face detected", middle)
+
         cv.imshow("source", img)
 
         if img.size == 0:
             raise Exception(-1)
-
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
+
+    return faces
+
+
+def get_bgr_value_subimage(subimage, math_func):
+    bgr_mean = np.empty((3,))
+    deviation = 0
+
+    for i in range(0,3):
+        bgr_mean[i] = math_func(subimage[:,:,i])
+
+    grayscale = cv.cvtColor(subimage, cv.COLOR_RGB2GRAY)
+    deviation = np.std(grayscale)
+
+    return bgr_mean, deviation
+
+if __name__ == '__main__':
+    square_zone = [[200, 150], 250]
+    detect_faces(square_zone)
