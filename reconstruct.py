@@ -103,12 +103,13 @@ def reconstruct(rubik):
                         if valid == 0:
                             print("Found it")
                             print(valid)
+                            print(cube)
+                            return cube
                         faces[Color.YELLOW] = np.rot90(faces[Color.YELLOW])
                     faces[Color.GREEN] = np.rot90(faces[Color.GREEN])
                 faces[Color.ORANGE] = np.rot90(faces[Color.ORANGE])
             faces[Color.RED] = np.rot90(faces[Color.RED])
         faces[Color.BLUE] = np.rot90(faces[Color.BLUE])
-
 
     # blue_face = faces[Color.BLUE]
     # orange_face = faces[Color.ORANGE]
@@ -118,10 +119,9 @@ def reconstruct(rubik):
     # green_face = faces[Color.GREEN]
 
     cube = cube_to_string(faces)
-    #print(cube)
-    #print(tools.verify(cube))
+    # print(cube)
     # print(tools.verify(cube))
-
+    # print(tools.verify(cube))
     
 
 if __name__ == '__main__':
@@ -228,4 +228,3 @@ if __name__ == '__main__':
     # primary_color_validation(rubik2)
     # primary_color_validation(rubik3)
     reconstruct(rubik3)
-
