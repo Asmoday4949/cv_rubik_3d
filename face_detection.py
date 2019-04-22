@@ -91,6 +91,7 @@ def main():
 
 import math
 from collections import Counter 
+from hough import segment_angle_linspace
 
 def filter_lines(lines):
 
@@ -116,21 +117,16 @@ def filter_lines(lines):
             deg = deg + 90
         
         return deg
-        #return deg - deg % 2
-
+        
     for line in lines:
-        # The below for loop runs till r and theta values  
-        # are in the range of the 2d array 
-
         for r,theta in line:
             angles.append(approx_angle(theta))
 
-    # print(angles)
     data = Counter(angles) 
-    get_mode = dict(data) 
+    get_mode = dict(data)
     mode_angle = [k for k, v in get_mode.items() if v == max(list(data.values()))] 
     
-    # print("Mode angle : "+str(mode_angle))
+    print("Mode angle : "+str(mode_angle))
 
     def get_theta(line):
         for r, theta in line:
@@ -141,7 +137,6 @@ def filter_lines(lines):
             return approx_angle(theta) == mode_angle[0]
 
     lines_filter = list(filter(filter_line,lines))
-    # print("length lines filter : "+str(len(lines_filter)))
 
     def filter_pack(line):
         rothetaline = rhotheta(line)
@@ -150,20 +145,86 @@ def filter_lines(lines):
 
     line_pack_one = list(filter(lambda line:not filter_pack(line), lines_filter))
     line_pack_two = list(filter(filter_pack, lines_filter))
-    print(str(len(lines_filter)) + " - " + str(len(line_pack_one)) + " - " + str(len(line_pack_two)))
-    if not len(line_pack_one) + len(line_pack_two) == len(lines_filter):
-        print("ERROR pack lines")
-    # print("length lines filter : "+str(len(lines_filter)))
     
-    return lines_filter
+    return line_pack_one, line_pack_two
 
 
 from hough import draw_lines, rhotheta
 
+def draw_lines_perso(img, lines, color, thickness):
+    for line in lines:
+        for r,theta in line: 
+            a = np.cos(theta) 
+            b = np.sin(theta) 
+            x0 = a*r 
+            y0 = b*r 
+            x1 = int(x0 + 1000*(-b)) 
+            y1 = int(y0 + 1000*(a)) 
+            x2 = int(x0 - 1000*(-b)) 
+            y2 = int(y0 - 1000*(a)) 
+            cv.line(img,(x1,y1), (x2,y2), color, thickness) 
 
-def find_intersects(lines):
-    pass
+def find_intersects(pack_one, pack_two, img):
+    def filter_pack(lines):
+        lines_filtered = []
+        for i in range(0, len(lines)-1):
+            append = True
+            for j in range(i+1, len(lines)):
+                line_one = lines[i]    
+                line_two = lines[j]
+                dist = line_one[0][0] - line_two[0][0]
+                append = append and abs(dist) > 2
+            if append:
+                lines_filtered.append(lines[i])
+        return lines_filtered
 
+    distances_one = []
+    distances_two = []
+    distances = []
+
+    pack_one = filter_pack(pack_one)
+    pack_two = filter_pack(pack_two)
+
+    draw_lines_perso(img, pack_one, color=(0,0,255), thickness=1)
+    draw_lines_perso(img, pack_two, color=(0,255,0), thickness=1)
+    cv.imshow("FILTER 2", img)
+
+    for i in range(0, len(pack_one)-1):
+        for j in range(i+1, len(pack_one)):
+            line_one = pack_one[i]    
+            line_two = pack_one[j]
+            dist = line_one[0][0] - line_two[0][0]
+            distances.append(abs(dist))
+            distances_one.append(abs(dist))
+    
+    for i in range(0, len(pack_two)-1):
+        for j in range(i+1, len(pack_two)):
+            line_one = pack_two[i]    
+            line_two = pack_two[j]
+            dist = line_one[0][0] - line_two[0][0]
+            distances.append(abs(dist))
+            distances_two.append(abs(dist))
+    
+    data = Counter(distances)
+    print(data)
+    get_mode = dict(data)
+    mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
+    print(mode)
+    
+    data = Counter(distances_one)
+    print(data)
+    get_mode = dict(data)
+    mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
+    print(mode)
+
+    data = Counter(distances_two)
+    print(data)
+    get_mode = dict(data)
+    mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
+    print(mode)
+
+
+from hough import intersection
 def detect_lines(img):
     # Convert the img to grayscale 
     gray = cv.cvtColor(img,cv.COLOR_BGR2GRAY)
@@ -171,57 +232,71 @@ def detect_lines(img):
     # Apply edge detection method on the image 
     edges = cv.Canny(gray,50,200,apertureSize = 3) 
     
+
+    # canny to find the edges
+    #canny = cv2.Canny(nonoise, 0, 10)
+    canny = cv.Canny(gray.copy(), 3, 150)
+    
+    # dwalton
+    # dilate the image to make the edge lines thicker
+    kernel = np.ones((5, 5), np.uint8)
+    cv.imshow("Canny other", canny)
+    dilated = cv.dilate(canny, kernel, iterations=2)
+    
+    cv.imshow("Canny delated", dilated)
+
+    try:
+        (_, contours, hierarchy) = cv.findContours(dilated.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+    except ValueError:
+        (contours, hierarchy) = cv.findContours(dilated.copy(), cv.RETR_TREE, cv.CHAIN_APPROX_SIMPLE)
+
+    con_img = img.copy()
+    cv.drawContours(con_img, contours, -1, (0,255,0), 3)
+    
+    cv.imshow("Contours", con_img)
+
+    poly_img = img.copy()
+    for con in contours:
+        epsilon = 0.1*cv.arcLength(con,True)
+        approx = cv.approxPolyDP(con,epsilon,True, 4)
+        cv.drawContours(poly_img, [approx], -1, (0, 0, 255), 3)
+    cv.imshow("poly dp", poly_img)
+
+    
     # This returns an array of r and theta values 
     lines = cv.HoughLines(edges,1,np.pi/180, 50)
     
-    lines = filter_lines(lines)
-
-    find_intersects(lines)
-
-    if not lines is None:
-
-        # TODO Use this function and find why it doesnt work
-        # draw_lines(img, lines)
+    seg_one, seg_two = filter_lines(lines)
 
 
-        # print('Nb lines : '+str(len(lines)))
-        for line in lines:
-            # The below for loop runs till r and theta values  
-            # are in the range of the 2d array 
-            for r,theta in line: 
-                
-                # Stores the value of cos(theta) in a 
-                a = np.cos(theta) 
-            
-                # Stores the value of sin(theta) in b 
-                b = np.sin(theta) 
-                
-                # x0 stores the value rcos(theta) 
-                x0 = a*r 
-                
-                # y0 stores the value rsin(theta) 
-                y0 = b*r 
-                
-                # x1 stores the rounded off value of (rcos(theta)-1000sin(theta)) 
-                x1 = int(x0 + 1000*(-b)) 
-                
-                # y1 stores the rounded off value of (rsin(theta)+1000cos(theta)) 
-                y1 = int(y0 + 1000*(a)) 
-            
-                # x2 stores the rounded off value of (rcos(theta)+1000sin(theta)) 
-                x2 = int(x0 - 1000*(-b)) 
-                
-                # y2 stores the rounded off value of (rsin(theta)-1000cos(theta)) 
-                y2 = int(y0 - 1000*(a)) 
-                
-                # cv.line draws a line in img from the point(x1,y1) to (x2,y2). 
-                # (0,0,255) denotes the colour of the line to be  
-                #drawn. In this case, it is red.  
-                cv.line(img,(x1,y1), (x2,y2), (0,0,255),2) 
-        
-        # All the changes made in the input image are finally 
-        # written on a new image houghlines.jpg 
-        # cv.imshow(f"Lines",img)
+    l1 = min(seg_one, key=lambda l:l[0][0])
+    l2 = max(seg_one, key=lambda l:l[0][0])
+    
+    l3 = min(seg_two, key=lambda l:l[0][0])
+    l4 = max(seg_two, key=lambda l:l[0][0])
+
+
+    find_intersects(seg_one, seg_two, img.copy())
+
+    draw_lines_perso(img, seg_one, color=(0,0,255), thickness=1)
+    draw_lines_perso(img, seg_two, color=(0,255,0), thickness=1)
+
+    draw_lines_perso(img, [l1], color=(0,255,255), thickness=2)
+    draw_lines_perso(img, [l2], color=(0,255,255), thickness=2)
+    draw_lines_perso(img, [l3], color=(0,255,255), thickness=2)
+    draw_lines_perso(img, [l4], color=(0,255,255), thickness=2)
+
+    i1 = intersection(l1,l3)
+    i2 = intersection(l1,l4)
+    i3 = intersection(l2,l3)
+    i4 = intersection(l2,l4)
+    
+    pts1 = np.float32([i1,i2,i3,i4])
+    pts2 = np.float32([[0,0],[300,0],[0,300],[300,300]])
+
+    M = cv.getPerspectiveTransform(pts1,pts2)
+    dst = cv.warpPerspective(img,M,(300,300))
+    cv.imshow("cubix", dst)
 
     return img
 
@@ -237,10 +312,15 @@ if __name__ == '__main__':
 
     while True:
         ret, img = cap.read()
+        sq = img.copy()
 
         # detect_lines_two(img)
         img_line = detect_lines(img)
         cv.imshow("source", img_line)
+
+        squares = find_squares(sq)
+        cv.drawContours(sq, squares, -1, (0, 255, 0), 3 )
+        cv.imshow('squares', sq)
 
         if img_line.size == 0:
             raise Exception(-1)
