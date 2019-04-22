@@ -2,66 +2,8 @@
 from color_enum import Color
 from pykociemba import tools 
 
-
-def verify(rubik):
-    tools.verify("")
-
-def primary_color_validation(rubik):
-    color_angles_counter = {}
-    color_edges_counter = {}
-    color_center_counter = {}
-    
-    angles = [(0,0), (0,2), (2,0), (2,2)]
-    edges = [(0,1), (1,0), (2,1), (1,2)]
-    center = (1,1)
-
-    for face in rubik:
-        for (i,j) in angles:
-            try:
-                color_angles_counter[face[i][j]] += 1
-            except KeyError:
-                color_angles_counter[face[i][j]] = 1
-        
-        for (i,j) in edges:
-            try:
-                color_edges_counter[face[i][j]] += 1
-            except KeyError:
-                color_edges_counter[face[i][j]] = 1
-        
-        (i,j) = center
-        try:
-            color_center_counter[face[i][j]] += 1
-        except KeyError:
-            color_center_counter[face[i][j]] = 1
-    
-    for c in Color:
-        try:
-            if color_angles_counter[c] != 4:
-                raise Exception("Invalid cube detected - during primary validation - angle", color_angles_counter)
-        except KeyError:
-            raise Exception("Invalid cube detected - during primary validation - angle", color_angles_counter)
-    
-    for c in Color:
-        try:
-            if color_edges_counter[c] != 4:
-                raise Exception("Invalid cube detected - during primary validation - edge", color_edges_counter)
-        except KeyError:
-            raise Exception("Invalid cube detected - during primary validation - edge", color_edges_counter)
-    
-    for c in Color:
-        try:
-            if color_center_counter[c] != 1:
-                raise Exception("Invalid cube detected - during primary validation - center", color_center_counter)
-        except KeyError:
-            raise Exception("Invalid cube detected - during primary validation - center", color_center_counter)
-
 # from kociemba import tools
 import numpy as np
-
-
-def color_to_char(char):
-
-    return data[char]
 
 def cube_to_string(rubik):
     data = {
@@ -82,12 +24,6 @@ def cube_to_string(rubik):
     return res
 
 def reconstruct(rubik):
-    # structure int[6][3][3]
-    #          blue
-    # orange | white | red | yellow
-    #          green
-    #
-    
     faces = {}
     for face in rubik:
         faces[face[1][1]] = np.array(face)
@@ -110,13 +46,6 @@ def reconstruct(rubik):
                 faces[Color.ORANGE] = np.rot90(faces[Color.ORANGE])
             faces[Color.RED] = np.rot90(faces[Color.RED])
         faces[Color.BLUE] = np.rot90(faces[Color.BLUE])
-
-    # blue_face = faces[Color.BLUE]
-    # orange_face = faces[Color.ORANGE]
-    # white_face = faces[Color.WHITE]
-    # red_face = faces[Color.RED]
-    # yellow_face = faces[Color.YELLOW]
-    # green_face = faces[Color.GREEN]
 
     cube = cube_to_string(faces)
 
@@ -226,7 +155,4 @@ if __name__ == '__main__':
         ],
     ]
 
-    # primary_color_validation(rubik1)
-    # primary_color_validation(rubik2)
-    # primary_color_validation(rubik3)
     reconstruct(rubik3)
