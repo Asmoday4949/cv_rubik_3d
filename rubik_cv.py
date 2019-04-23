@@ -69,7 +69,7 @@ def rubik_cv():
     print(cube)
     print(solution)
 
-    gl_app = OpenGLApp("F B")
+    gl_app = OpenGLApp(solution)
     gl_app.run()
 
 if __name__ == '__main__':
