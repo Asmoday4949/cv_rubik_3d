@@ -1,5 +1,6 @@
 import numpy as np
 import cv2 as cv
+import sys
 
 from detect_color import detect_color
 from reconstruct import reconstruct
@@ -50,7 +51,7 @@ def detect_faces(square_zone = None):
         if k > -1:
             k = chr(k)
             if k == 'q':
-                break
+                sys.exit(0)
             elif k == 'd':
                 print("couillon")
                 can_detect_color = True
