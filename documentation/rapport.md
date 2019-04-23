@@ -1,6 +1,6 @@
 ---
-title: MagicStick
-subtitle: Plan de test
+title: Résolution de Rubik's Cube
+subtitle: Traîtement d'image
 lang: fr
 author:
 - Bulloni Lucas <lucas.bulloni@he-arc.ch>
