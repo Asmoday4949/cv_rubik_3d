@@ -45,7 +45,7 @@ def filter_lines(lines):
     get_mode = dict(data)
     mode_angle = [k for k, v in get_mode.items() if v == max(list(data.values()))] 
     
-    print("Mode angle : "+str(mode_angle))
+    # print("Mode angle : "+str(mode_angle))
 
     def get_theta(line):
         for r, theta in line:
@@ -125,22 +125,22 @@ def find_intersects(pack_one, pack_two, img):
             distances_two.append(abs(dist))
     
     data = Counter(distances)
-    print(data)
+    # print(data)
     get_mode = dict(data)
     mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
-    print(mode)
+    # print(mode)
     
     data = Counter(distances_one)
-    print(data)
+    # print(data)
     get_mode = dict(data)
     mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
-    print(mode)
+    # print(mode)
 
     data = Counter(distances_two)
-    print(data)
+    # print(data)
     get_mode = dict(data)
     mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
-    print(mode)
+    # print(mode)
 
 def resize_img(img, la1, la2, lb1, lb2):
     i1 = intersection(la1,lb1)
@@ -165,6 +165,10 @@ def detect_lines(img):
 
     # This returns an array of r and theta values 
     lines = cv.HoughLines(edges,1,np.pi/180, 50)
+    
+    # Return None if no lnes are detected
+    if lines is None:
+        return None
     
     seg_one, seg_two = filter_lines(lines)
     if len(seg_one) <= 0 or len(seg_two) <= 0:
