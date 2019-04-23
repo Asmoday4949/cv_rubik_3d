@@ -8,11 +8,13 @@ out vec4 oColor;
 
 void main()
 {
-    if(abs(vVertex.x) > 0.95 && abs(vVertex.y) > 0.95 ||
-      abs(vVertex.y) > 0.95 && abs(vVertex.z) > 0.95 ||
-      abs(vVertex.z) > 0.95 && abs(vVertex.x) > 0.95)
+    float threshold = 0.85;
+
+    if(abs(vVertex.x) > threshold && abs(vVertex.y) > threshold ||
+      abs(vVertex.y) > threshold && abs(vVertex.z) > threshold ||
+      abs(vVertex.z) > threshold && abs(vVertex.x) > threshold)
     {
-      oColor = vec4(0.0, 0.0, 0.0, 1.0);
+      oColor = vec4(0.15, 0.15, 0.15, 1.0);
     }
     else
     {

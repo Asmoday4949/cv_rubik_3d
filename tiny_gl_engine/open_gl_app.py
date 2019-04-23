@@ -10,17 +10,17 @@ from tiny_gl_engine.rubiks_cube import *
 from tiny_gl_engine.camera import *
 
 class OpenGLApp:
-    def __init__(self):
+    def __init__(self, rules):
         self.init_screen()
         self.init_keys()
         self.context = create_context()
         self.load_shaders()
         self.build_camera()
         self.build_rubiks_cube()
-        self.init_parser("F R U L B D")
+        self.init_parser(rules)  # "F R U L B D"
 
     def init_screen(self):
-        self.size = [256, 256]
+        self.size = [1024, 720]
         self.running = True
         pygame.init()
         pygame.display.set_caption('Rubik\'s Cube')
@@ -35,6 +35,8 @@ class OpenGLApp:
 
     def init_parser(self, rule):
         self.orders = rule.split(' ')
+        self.reversed_orders = self.inverse_orders(self.orders)
+        self.current_index = 0
         self.start_time = time.time()
 
     def run(self):
@@ -46,7 +48,6 @@ class OpenGLApp:
                 self.handle_keys_event(event)
             context.clear(0.0,0.0,0.0)
             cube.render()
-            self.execute_orders()
             pygame.display.flip()
         pygame.quit()
 
@@ -56,18 +57,10 @@ class OpenGLApp:
         if event.type == KEYDOWN:
             self.running = not (event.key == K_q)
             # cube.print()
-            # if event.key == K_f:
-            #     cube.rotate_x(2,False)
-            # if event.key == K_g:
-            #     cube.rotate_y(2,False)
-            # if event.key == K_h:
-            #     cube.rotate_z(2,False)
-            # if event.key == K_c:
-            #     cube.rotate_x(2,True)
-            # if event.key == K_v:
-            #     cube.rotate_y(2,True)
-            # if event.key == K_b:
-            #     cube.rotate_z(2,True)
+            if event.key == K_1:
+                self.previous()
+            if event.key == K_2:
+                self.next()
         if event.type == MOUSEBUTTONDOWN:
             self.mouse_pressed = True
             self.start_pos = event.pos
@@ -85,15 +78,32 @@ class OpenGLApp:
         if event.type == MOUSEBUTTONUP:
             self.mouse_pressed = False
 
-    def execute_orders(self):
-        orders = self.orders
-        elapsed_time = time.time() - self.start_time
-        if len(orders) > 0 and elapsed_time > 1:
-            order = orders.pop(0)
-            print("Order executed : " + order)
+    def inverse_orders(self, orders):
+        inversed_orders = []
+        for order in orders:
+            if '2' in order:
+                inversed_orders.append(order)
+            elif '\'' in order:
+                inversed_orders.append(order[0])
+            else:
+                inversed_orders.append(order[0] + '\'')
+        return inversed_orders
+
+    def next(self):
+        orders = self.orders;
+        if self.current_index < len(orders):
+            order = orders[self.current_index]
             self.execute_order(order)
-            time.sleep(1.0)
-            start_time = time.time()
+            print(self.current_index)
+            self.current_index += 1
+
+    def previous(self):
+        orders = self.reversed_orders
+        if self.current_index >= 0:
+            self.current_index -= 1
+            order = orders[self.current_index]
+            self.execute_order(order)
+            print(self.current_index)
 
     def execute_order(self, order):
         cube = self.cube
@@ -109,6 +119,38 @@ class OpenGLApp:
             cube.rotate_z(0, False)
         if order == 'D':
             cube.rotate_y(0, False)
+
+        if order == 'F\'':
+            cube.rotate_z(2, False)
+        if order == 'R\'':
+            cube.rotate_x(2, False)
+        if order == 'U\'':
+            cube.rotate_y(2, False)
+        if order == 'L\'':
+            cube.rotate_x(0, True)
+        if order == 'B\'':
+            cube.rotate_z(0, True)
+        if order == 'D\'':
+            cube.rotate_y(0, True)
+
+        if order == 'F2':
+            for i in range(0,2):
+                cube.rotate_z(2, True)
+        if order == 'R2':
+            for i in range(0,2):
+                cube.rotate_x(2, True)
+        if order == 'U2':
+            for i in range(0,2):
+                cube.rotate_y(2, True)
+        if order == 'L2':
+            for i in range(0,2):
+                cube.rotate_x(0, False)
+        if order == 'B2':
+            for i in range(0,2):
+                cube.rotate_z(0, False)
+        if order == 'D2':
+            for i in range(0,2):
+                cube.rotate_y(0, False)
 
 
     def load_shaders(self):
