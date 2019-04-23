@@ -45,7 +45,7 @@ def filter_lines(lines):
     get_mode = dict(data)
     mode_angle = [k for k, v in get_mode.items() if v == max(list(data.values()))] 
     
-    print("Mode angle : "+str(mode_angle))
+    # print("Mode angle : "+str(mode_angle))
 
     def get_theta(line):
         for r, theta in line:
@@ -125,22 +125,22 @@ def find_intersects(pack_one, pack_two, img):
             distances_two.append(abs(dist))
     
     data = Counter(distances)
-    print(data)
+    # print(data)
     get_mode = dict(data)
     mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
-    print(mode)
+    # print(mode)
     
     data = Counter(distances_one)
-    print(data)
+    # print(data)
     get_mode = dict(data)
     mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
-    print(mode)
+    # print(mode)
 
     data = Counter(distances_two)
-    print(data)
+    # print(data)
     get_mode = dict(data)
     mode = [k for k, v in get_mode.items() if v == max(list(data.values()))]
-    print(mode)
+    # print(mode)
 
 def resize_img(img, la1, la2, lb1, lb2):
     i1 = intersection(la1,lb1)
