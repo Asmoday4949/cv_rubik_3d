@@ -11,7 +11,7 @@ pagesize: A4
 numbersections: true
 documentclass: scrartcl
 geometry: margin=2.5cm
-bibliography: rapport-rsc/rapport.bib
+bibliography: rapport.bib
 header-includes: |
       \usepackage{fancyhdr}
       \pagestyle{fancy}
