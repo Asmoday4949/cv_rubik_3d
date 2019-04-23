@@ -18,6 +18,7 @@ class OpenGLApp:
         self.build_camera()
         self.build_rubiks_cube()
         self.init_parser(rules)  # "F R U L B D"
+        self.randomize()
 
     def init_screen(self):
         self.size = [1024, 720]
@@ -38,6 +39,10 @@ class OpenGLApp:
         self.reversed_orders = self.inverse_orders(self.orders)
         self.current_index = 0
         self.start_time = time.time()
+
+    def randomize(self):
+        for i in range(0, len(self.reversed_orders)):
+            self.previous()
 
     def run(self):
         context = self.context
@@ -89,21 +94,21 @@ class OpenGLApp:
                 inversed_orders.append(order[0] + '\'')
         return inversed_orders
 
-    def next(self):
+    def previous(self):
         orders = self.orders;
         if self.current_index < len(orders):
-            order = orders[self.current_index]
-            self.execute_order(order)
-            print(self.current_index)
-            self.current_index += 1
+            if self.current_index != len(orders):
+                order = orders[self.current_index]
+                self.execute_order(order)
+                self.current_index += 1
 
-    def previous(self):
+    def next(self):
         orders = self.reversed_orders
         if self.current_index >= 0:
-            self.current_index -= 1
-            order = orders[self.current_index]
-            self.execute_order(order)
-            print(self.current_index)
+            if self.current_index != 0:
+                self.current_index -= 1
+                order = orders[self.current_index]
+                self.execute_order(order)
 
     def execute_order(self, order):
         cube = self.cube
