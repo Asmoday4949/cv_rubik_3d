@@ -10,10 +10,11 @@ def rubik_cv():
     faces = detect_faces(square_zone)
     cube = reconstruct(faces)
 
+    print(faces)
+    print(cube)
+
     gl_app = OpenGLApp()
     gl_app.run()
-
-
 
 if __name__ == '__main__':
     rubik_cv()

@@ -103,6 +103,8 @@ def reconstruct(rubik):
                         if valid == 0:
                             print("Found it")
                             print(valid)
+                            
+                            return cube
                         faces[Color.YELLOW] = np.rot90(faces[Color.YELLOW])
                     faces[Color.GREEN] = np.rot90(faces[Color.GREEN])
                 faces[Color.ORANGE] = np.rot90(faces[Color.ORANGE])

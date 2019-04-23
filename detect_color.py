@@ -28,6 +28,8 @@ def detect_color(image, square_zone):
             if deviation > 10:
                 return None
 
+            color = decide_color(bgr_mean)
+            
             result[i].append(decide_color(bgr_mean))
 
             # cv.imshow(f"{i}:{j}", subimage)
@@ -54,13 +56,14 @@ def decide_color(bgr_value):
         return Color.BLUE
     elif hsv_value[0] < 90 and hsv_value[0] > 60:
         return Color.GREEN
-    elif hsv_value[0] < 30 and hsv_value[0] > 15:
+    elif hsv_value[0] < 30 and hsv_value[0] > 10 and bgr_value[1] > 50:
         return Color.YELLOW
     elif hsv_value[0] < 190 and hsv_value[0] > 160:
         return Color.RED
     elif hsv_value[0] < 15:
         return Color.ORANGE
 
+    print(hsv_value, bgr_value)    
     return None
 
 def detect_faces(square_zone):
