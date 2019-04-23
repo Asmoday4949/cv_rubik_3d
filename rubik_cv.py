@@ -17,6 +17,8 @@ def detect_faces(square_zone = None):
         print("error while opening camera")
         raise e
 
+    can_detect_color = False
+
     while len(faces_in) < 6:
         ret, img = cap.read()
 
@@ -28,8 +30,6 @@ def detect_faces(square_zone = None):
         
         print(faces)
 
-        can_detect_color = False
-
         if not img is None and can_detect_color:
             face = detect_color(img, square_zone)
 
@@ -40,17 +40,19 @@ def detect_faces(square_zone = None):
                     faces_in.add(middle)
                     faces.append(face)
                     print("New face detected", middle)
-
-            cv.imshow("source", img)
+                    can_detect_color = False
 
             if img.size == 0:
                 raise Exception(-1)
-        if cv.waitKey(1):
-            print(0xFF)
-            if 0xFF == ord('q'):
+
+        k = cv.waitKey(1)
+
+        if k > -1:
+            k = chr(k)
+            if k == 'q':
                 break
-            elif 0xFF == ord('d'):
-                print('hello2')
+            elif k == 'd':
+                print("couillon")
                 can_detect_color = True
 
     return faces
