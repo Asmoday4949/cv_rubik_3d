@@ -28,7 +28,18 @@ header-includes: |
 
 # Introduction
 
-# Configuration du programme
+# Configuration d'exécution
+
+Pour la bonne exécution du programme, il vous installer le matériel dans la manière optimale.
+
+## Matérielle nécessaire
+
+- Caméra
+- Rubik's cube
+
+**Optionnel :** Lampe
+
+La lampe permet d'avoir un meilleur résultat pour la détection de la position du cube et la détection des couleurs.
 
 # Utilisation
 
