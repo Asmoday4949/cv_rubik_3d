@@ -166,6 +166,10 @@ def detect_lines(img):
     # This returns an array of r and theta values 
     lines = cv.HoughLines(edges,1,np.pi/180, 50)
     
+    # Return None if no lnes are detected
+    if lines is None:
+        return None
+    
     seg_one, seg_two = filter_lines(lines)
     if len(seg_one) <= 0 or len(seg_two) <= 0:
         return None
