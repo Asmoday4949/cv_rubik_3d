@@ -28,7 +28,7 @@ def detect_faces(square_zone = None):
 
         if square_zone == None and not img is None:
             square_zone = [[0,0], img.shape[0]]
-        
+
         print(faces)
 
         if not img is None and can_detect_color:
@@ -69,8 +69,8 @@ def rubik_cv():
     print(cube)
     print(solution)
 
-    # gl_app = OpenGLApp()
-    # gl_app.run()
+    gl_app = OpenGLApp(solution)
+    gl_app.run()
 
 if __name__ == '__main__':
     rubik_cv()
