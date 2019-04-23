@@ -59,15 +59,15 @@ def detect_faces(square_zone = None):
     return faces
 
 
-#import kociemba
+import kociemba
 
 def rubik_cv():
-    #faces = detect_faces()
-    #cube = reconstruct(faces)
-    #solution = kociemba.solve(cube)
-    #print(faces)
-    #print(cube)
-    #print(solution)
+    faces = detect_faces()
+    cube = reconstruct(faces)
+    solution = kociemba.solve(cube)
+    print(faces)
+    print(cube)
+    print(solution)
 
     gl_app = OpenGLApp("F B")
     gl_app.run()
