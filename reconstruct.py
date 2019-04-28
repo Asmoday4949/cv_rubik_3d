@@ -2,7 +2,6 @@
 from color_enum import Color
 from pykociemba import tools 
 
-# from kociemba import tools
 import numpy as np
 
 def cube_to_string(rubik):
@@ -54,8 +53,11 @@ def reconstruct(rubik):
     # print(tools.verify(cube))
     # print(tools.verify(cube))
     
+import kociemba
 
 if __name__ == '__main__':
+    print(tools.verify("RLBUUDDBRFRRLRFDRFUUFUFFURULLDFDDLBLUBLDLRBBBFDDUBFRLB"))
+    print(kociemba.solve("RLBUUDDBRFRRLRFDRFUUFUFFURULLDFDDLBLUBLDLRBBBFDDUBFRLB"))
     rubik1 = [ # This is a valid rubik's list of faces
         [
             [Color.BLUE, Color.GREEN, Color.BLUE],

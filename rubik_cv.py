@@ -29,7 +29,7 @@ def detect_faces(square_zone = None):
         if square_zone == None and not img is None:
             square_zone = [[0,0], img.shape[0]]
 
-        print(faces)
+        #print(faces)
 
         if not img is None and can_detect_color:
             face = detect_color(img, square_zone)
@@ -38,10 +38,13 @@ def detect_faces(square_zone = None):
                 middle = face[1][1]
 
                 if middle not in faces_in and middle != None:
+                    print(face)
                     faces_in.add(middle)
                     faces.append(face)
                     print("New face detected", middle)
                     can_detect_color = False
+                    print(faces_in)
+                
 
             if img.size == 0:
                 raise Exception(-1)
@@ -63,10 +66,10 @@ import kociemba
 
 def rubik_cv():
     faces = detect_faces()
-    cube = reconstruct(faces)
-    solution = kociemba.solve(cube)
     print(faces)
+    cube = reconstruct(faces)
     print(cube)
+    solution = kociemba.solve(cube)
     print(solution)
 
     gl_app = OpenGLApp(solution)
