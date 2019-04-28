@@ -1,6 +1,6 @@
 ---
-title: MagicStick
-subtitle: Plan de test
+title: Résolution de Rubik's Cube
+subtitle: Traîtement d'image
 lang: fr
 author:
 - Bulloni Lucas <lucas.bulloni@he-arc.ch>
@@ -11,7 +11,7 @@ pagesize: A4
 numbersections: true
 documentclass: scrartcl
 geometry: margin=2.5cm
-bibliography: rapport-rsc/rapport.bib
+bibliography: rapport.bib
 header-includes: |
       \usepackage{fancyhdr}
       \pagestyle{fancy}

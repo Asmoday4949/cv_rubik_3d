@@ -1,10 +1,11 @@
 import numpy as np
 import cv2 as cv
+import sys
 
 from detect_color import detect_color
 from reconstruct import reconstruct
 from face_detection import detect_lines
-# from tiny_gl_engine.open_gl_app import OpenGLApp
+from tiny_gl_engine.open_gl_app import OpenGLApp
 
 def detect_faces(square_zone = None):
 
@@ -27,7 +28,7 @@ def detect_faces(square_zone = None):
 
         if square_zone == None and not img is None:
             square_zone = [[0,0], img.shape[0]]
-        
+
         print(faces)
 
         if not img is None and can_detect_color:
@@ -50,7 +51,7 @@ def detect_faces(square_zone = None):
         if k > -1:
             k = chr(k)
             if k == 'q':
-                break
+                sys.exit(0)
             elif k == 'd':
                 print("couillon")
                 can_detect_color = True
@@ -68,8 +69,8 @@ def rubik_cv():
     print(cube)
     print(solution)
 
-    # gl_app = OpenGLApp()
-    # gl_app.run()
+    gl_app = OpenGLApp(solution)
+    gl_app.run()
 
 if __name__ == '__main__':
     rubik_cv()
