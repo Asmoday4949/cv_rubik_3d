@@ -18,6 +18,8 @@ class OpenGLApp:
         self.build_camera()
         self.build_rubiks_cube()
         self.init_parser(rules)  # "F R U L B D"
+        print(self.orders)
+        print(self.reversed_orders)
         self.randomize()
 
     def init_screen(self):
@@ -37,7 +39,7 @@ class OpenGLApp:
     def init_parser(self, rule):
         self.orders = rule.split(' ')
         self.reversed_orders = self.inverse_orders(self.orders)
-        self.current_index = 0
+        self.current_index = len(self.orders)
         self.start_time = time.time()
 
     def randomize(self):
@@ -95,23 +97,42 @@ class OpenGLApp:
         return inversed_orders
 
     def previous(self):
-        orders = self.orders;
-        if self.current_index < len(orders):
-            if self.current_index != len(orders):
-                order = orders[self.current_index]
-                self.execute_order(order)
-                self.current_index += 1
+        orders = self.reversed_orders;
+        if self.current_index > 0:
+            self.current_index -= 1
+            order = orders[self.current_index]
+            self.execute_order(order)
+            print(self.current_index)
 
     def next(self):
-        orders = self.reversed_orders
-        if self.current_index >= 0:
-            if self.current_index != 0:
-                self.current_index -= 1
-                order = orders[self.current_index]
-                self.execute_order(order)
+        orders = self.orders
+        if self.current_index < len(orders):
+            order = orders[self.current_index]
+            self.execute_order(order)
+            self.current_index += 1
 
     def execute_order(self, order):
         cube = self.cube
+		
+        if order == 'F2':
+            for i in range(0,2):
+                cube.rotate_z(2, True)
+        if order == 'R2':
+            for i in range(0,2):
+                cube.rotate_x(2, True)
+        if order == 'U2':
+            for i in range(0,2):
+                cube.rotate_y(2, True)
+        if order == 'L2':
+            for i in range(0,2):
+                cube.rotate_x(0, False)
+        if order == 'B2':
+            for i in range(0,2):
+                cube.rotate_z(0, False)
+        if order == 'D2':
+            for i in range(0,2):
+                cube.rotate_y(0, False)
+		
         if order == 'F':
             cube.rotate_z(2, True)
         if order == 'R':
@@ -137,25 +158,6 @@ class OpenGLApp:
             cube.rotate_z(0, True)
         if order == 'D\'':
             cube.rotate_y(0, True)
-
-        if order == 'F2':
-            for i in range(0,2):
-                cube.rotate_z(2, True)
-        if order == 'R2':
-            for i in range(0,2):
-                cube.rotate_x(2, True)
-        if order == 'U2':
-            for i in range(0,2):
-                cube.rotate_y(2, True)
-        if order == 'L2':
-            for i in range(0,2):
-                cube.rotate_x(0, False)
-        if order == 'B2':
-            for i in range(0,2):
-                cube.rotate_z(0, False)
-        if order == 'D2':
-            for i in range(0,2):
-                cube.rotate_y(0, False)
 
 
     def load_shaders(self):
