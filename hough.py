@@ -254,8 +254,9 @@ def point_line_dist(point, line):
             numerator = abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
             denominator = length(line)
             if denominator < 1:
-                print("Error: line length less than a single pixel.")
-                return ERRORVAL
+                #print("Error: line length less than a single pixel.")
+                return 0
+                #return ERRORVAL
     return numerator / denominator
 
 

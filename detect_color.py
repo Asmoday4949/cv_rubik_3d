@@ -23,20 +23,23 @@ def detect_color(image, square_zone):
 
             subimage = image[start_width:end_width, start_height:end_height]
 
-            bgr_mean, deviation = get_bgr_value_subimage(subimage, np.mean)
+            #bgr_mean, deviation = get_bgr_value_subimage(subimage, np.mean)
+            bgr_mean, deviation = get_bgr_value_subimage(subimage, np.median)
 
-            if deviation > 10:
-                return None
+            #if deviation > 10:
+            #    print("hello")
+            #    return None
 
             color = decide_color(bgr_mean)
             
             result[i].append(decide_color(bgr_mean))
 
-            # cv.imshow(f"{i}:{j}", subimage)
+            cv.imshow(f"{i}:{j}", subimage)
             sub_zone[0][0] += width_one_square
 
         sub_zone[0][0] = square_zone[0][0]
         sub_zone[0][1] += width_one_square
+    print(result)
 
     return result
 
@@ -52,18 +55,19 @@ def decide_color(bgr_value):
 
     if bgr_value.mean() > 150 and np.std(bgr_value) < 40 :
         return Color.WHITE
-    elif hsv_value[0] > 90 and hsv_value[0] < 110:
+    elif hsv_value[0] > 90 and hsv_value[0] < 120:
         return Color.BLUE
     elif hsv_value[0] < 90 and hsv_value[0] > 60:
         return Color.GREEN
     elif hsv_value[0] < 30 and hsv_value[0] > 10 and bgr_value[1] > 50:
         return Color.YELLOW
-    elif hsv_value[0] < 190 and hsv_value[0] > 160:
+    # elif hsv_value[0] < 190 and hsv_value[0] > 160: # 160 change into
+    elif hsv_value[0] < 190 and bgr_value[1] < 60:
         return Color.RED
     elif hsv_value[0] < 15:
         return Color.ORANGE
 
-    print(hsv_value, bgr_value)    
+    #print(hsv_value, bgr_value)
     return None
 
 def get_bgr_value_subimage(subimage, math_func):

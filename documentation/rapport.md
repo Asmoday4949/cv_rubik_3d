@@ -41,9 +41,24 @@ Pour la bonne exécution du programme, il vous installer le matériel dans la ma
 
 La lampe permet d'avoir un meilleur résultat pour la détection de la position du cube et la détection des couleurs.
 
+Le but de ce projet était la réalisation d'une application permettant la détection d'un rubik's cube, sa reconnaissance ainsi que sa résolution avec affiche de celui-ci à travers un model 3D. Ce projet a été réalisé dans le cadre du cours "Traitemen d'image" à la He-Arc.
+
+# Configuration du programme
+
+Ce programme nécessite les packages python suivantes:
+- 
+
 # Utilisation
 
+
+
 # Méthode et solution
+
+
+
+# Résultats
+
+
 
 # Conclusion
 
