@@ -34,7 +34,7 @@ def detect_color(image, square_zone):
             
             result[i].append(decide_color(bgr_mean))
 
-            cv.imshow(f"{i}:{j}", subimage)
+            # cv.imshow(f"{i}:{j}", subimage)
             sub_zone[0][0] += width_one_square
 
         sub_zone[0][0] = square_zone[0][0]

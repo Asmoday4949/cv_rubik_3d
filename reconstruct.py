@@ -14,19 +14,25 @@ def cube_to_string(rubik):
         Color.ORANGE: 'L'
     }
 
-    res = ''.join(map(lambda c: data[c], rubik[Color.BLUE].flatten()))
-    res += ''.join(map(lambda c: data[c], rubik[Color.RED].flatten()))
-    res += ''.join(map(lambda c: data[c], rubik[Color.WHITE].flatten()))
-    res += ''.join(map(lambda c: data[c], rubik[Color.GREEN].flatten()))
-    res += ''.join(map(lambda c: data[c], rubik[Color.ORANGE].flatten()))
-    res += ''.join(map(lambda c: data[c], rubik[Color.YELLOW].flatten()))
+    res = ''.join(map(lambda c: data[c],
+rubik[Color.BLUE].flatten()))
+    res += ''.join(map(lambda c: data[c],
+rubik[Color.RED].flatten()))
+    res += ''.join(map(lambda c: data[c],
+rubik[Color.WHITE].flatten()))
+    res += ''.join(map(lambda c: data[c],
+rubik[Color.GREEN].flatten()))
+    res += ''.join(map(lambda c: data[c],
+rubik[Color.ORANGE].flatten()))
+    res += ''.join(map(lambda c: data[c],
+rubik[Color.YELLOW].flatten()))
     return res
 
 def reconstruct(rubik):
     faces = {}
     for face in rubik:
-        faces[face[1][1]] = np.array(face)
-    
+        faces[face[1][1]] = np.transpose(np.array(face))
+    print(faces)
 
     for blue in range(0,4):
         for red in range(0,4):
@@ -48,6 +54,7 @@ def reconstruct(rubik):
 
     cube = cube_to_string(faces)
 
+    raise Exception("Invalid cube")
     return cube
     # print(cube)
     # print(tools.verify(cube))
@@ -56,105 +63,39 @@ def reconstruct(rubik):
 import kociemba
 
 if __name__ == '__main__':
-    print(tools.verify("RLBUUDDBRFRRLRFDRFUUFUFFURULLDFDDLBLUBLDLRBBBFDDUBFRLB"))
-    print(kociemba.solve("RLBUUDDBRFRRLRFDRFUUFUFFURULLDFDDLBLUBLDLRBBBFDDUBFRLB"))
-    rubik1 = [ # This is a valid rubik's list of faces
+    # print(tools.verify("BBRUUUUDFBRUURRBBDLFFFFFRFBDLFDDDFDDLBDLLLRLRLBUUBRURL"))
+    # print(kociemba.solve("BBRUUUUDFBRUURRBBDLFFFFFRFBDLFDDDFDDLBDLLLRLRLBUUBRURL"))
+    
+    test = [
         [
-            [Color.BLUE, Color.GREEN, Color.BLUE],
-            [Color.WHITE, Color.GREEN, Color.BLUE],
-            [Color.YELLOW, Color.GREEN, Color.BLUE]
+            [Color.ORANGE,Color.WHITE,Color.WHITE],
+            [Color.WHITE,Color.WHITE,Color.WHITE],
+            [Color.RED,Color.WHITE,Color.YELLOW]
         ],
         [
-            [Color.GREEN, Color.ORANGE, Color.RED],
-            [Color.YELLOW, Color.YELLOW, Color.ORANGE],
-            [Color.WHITE, Color.ORANGE, Color.BLUE]
+            [Color.YELLOW,Color.RED,Color.BLUE],
+            [Color.BLUE,Color.RED,Color.RED],
+            [Color.YELLOW,Color.YELLOW,Color.GREEN]
         ],
         [
-            [Color.GREEN, Color.YELLOW, Color.WHITE],
-            [Color.RED, Color.BLUE, Color.GREEN],
-            [Color.RED, Color.BLUE, Color.GREEN]
+            [Color.ORANGE,Color.YELLOW,Color.BLUE],
+            [Color.BLUE,Color.YELLOW,Color.RED],
+            [Color.BLUE,Color.RED,Color.ORANGE]
         ],
         [
-            [Color.GREEN, Color.RED, Color.ORANGE],
-            [Color.WHITE, Color.WHITE, Color.BLUE],
-            [Color.ORANGE, Color.RED, Color.ORANGE]
+            [Color.ORANGE,Color.YELLOW,Color.GREEN],
+            [Color.ORANGE,Color.ORANGE,Color.ORANGE],
+            [Color.RED,Color.ORANGE,Color.RED]
         ],
         [
-            [Color.ORANGE, Color.WHITE, Color.WHITE],
-            [Color.RED, Color.ORANGE, Color.BLUE],
-            [Color.RED, Color.GREEN, Color.WHITE]
+            [Color.YELLOW,Color.YELLOW,Color.RED],
+            [Color.BLUE,Color.BLUE,Color.BLUE],
+            [Color.BLUE,Color.GREEN,Color.WHITE]
         ],
         [
-            [Color.YELLOW, Color.YELLOW, Color.RED],
-            [Color.ORANGE, Color.RED, Color.WHITE],
-            [Color.YELLOW, Color.YELLOW, Color.YELLOW]
-        ],
+            [Color.GREEN,Color.ORANGE,Color.WHITE],
+            [Color.GREEN,Color.GREEN,Color.GREEN],
+            [Color.WHITE,Color.GREEN,Color.GREEN]
+        ]
     ]
-
-    rubik2 = [ # Invalid corner and edge inverted
-        [
-            [Color.GREEN, Color.BLUE, Color.BLUE],
-            [Color.WHITE, Color.GREEN, Color.BLUE],
-            [Color.YELLOW, Color.GREEN, Color.BLUE]
-        ],
-        [
-            [Color.GREEN, Color.ORANGE, Color.RED],
-            [Color.YELLOW, Color.YELLOW, Color.ORANGE],
-            [Color.WHITE, Color.ORANGE, Color.BLUE]
-        ],
-        [
-            [Color.GREEN, Color.YELLOW, Color.WHITE],
-            [Color.RED, Color.BLUE, Color.GREEN],
-            [Color.RED, Color.BLUE, Color.GREEN]
-        ],
-        [
-            [Color.GREEN, Color.RED, Color.ORANGE],
-            [Color.WHITE, Color.WHITE, Color.BLUE],
-            [Color.ORANGE, Color.RED, Color.ORANGE]
-        ],
-        [
-            [Color.ORANGE, Color.WHITE, Color.WHITE],
-            [Color.RED, Color.ORANGE, Color.BLUE],
-            [Color.RED, Color.GREEN, Color.WHITE]
-        ],
-        [
-            [Color.YELLOW, Color.YELLOW, Color.RED],
-            [Color.ORANGE, Color.RED, Color.WHITE],
-            [Color.YELLOW, Color.YELLOW, Color.YELLOW]
-        ],
-    ]
-
-    rubik3 = [ # Invalid Center changed from green to blue
-        [
-            [Color.BLUE, Color.GREEN, Color.BLUE],
-            [Color.WHITE, Color.GREEN, Color.BLUE],
-            [Color.YELLOW, Color.GREEN, Color.BLUE]
-        ],
-        [
-            [Color.GREEN, Color.ORANGE, Color.RED],
-            [Color.YELLOW, Color.YELLOW, Color.ORANGE],
-            [Color.WHITE, Color.ORANGE, Color.BLUE]
-        ],
-        [
-            [Color.GREEN, Color.YELLOW, Color.WHITE],
-            [Color.RED, Color.BLUE, Color.GREEN],
-            [Color.RED, Color.BLUE, Color.GREEN]
-        ],
-        [
-            [Color.GREEN, Color.RED, Color.ORANGE],
-            [Color.WHITE, Color.WHITE, Color.BLUE],
-            [Color.ORANGE, Color.RED, Color.ORANGE]
-        ],
-        [
-            [Color.ORANGE, Color.WHITE, Color.WHITE],
-            [Color.RED, Color.ORANGE, Color.BLUE],
-            [Color.RED, Color.GREEN, Color.WHITE]
-        ],
-        [
-            [Color.YELLOW, Color.YELLOW, Color.RED],
-            [Color.ORANGE, Color.RED, Color.WHITE],
-            [Color.YELLOW, Color.YELLOW, Color.YELLOW]
-        ],
-    ]
-
-    reconstruct(rubik3)
+    print(reconstruct(test))

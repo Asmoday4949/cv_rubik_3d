@@ -21,7 +21,6 @@ def load_file_content(filepath):
     file.close()
     return content
 
-
 def print_matrix(matrix):
     for i in range(0,4):
         for j in range(0,4):
