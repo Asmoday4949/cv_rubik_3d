@@ -20,6 +20,7 @@ class OpenGLApp:
         self.init_parser(rules)  # "F R U L B D"
         print(self.orders)
         print(self.reversed_orders)
+        #self.current_index = 0
         self.randomize()
 
     def init_screen(self):
@@ -113,7 +114,7 @@ class OpenGLApp:
 
     def execute_order(self, order):
         cube = self.cube
-		
+
         if order == 'F2':
             for i in range(0,2):
                 cube.rotate_z(2, True)
@@ -132,7 +133,7 @@ class OpenGLApp:
         if order == 'D2':
             for i in range(0,2):
                 cube.rotate_y(0, False)
-		
+
         if order == 'F':
             cube.rotate_z(2, True)
         if order == 'R':
