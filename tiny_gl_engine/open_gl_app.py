@@ -17,10 +17,7 @@ class OpenGLApp:
         self.load_shaders()
         self.build_camera()
         self.build_rubiks_cube()
-        self.init_parser(rules)  # "F R U L B D"
-        print(self.orders)
-        print(self.reversed_orders)
-        #self.current_index = 0
+        self.init_parser(rules)
         self.randomize()
 
     def init_screen(self):
@@ -31,7 +28,7 @@ class OpenGLApp:
         self.screen = pygame.display.set_mode(self.size, pygame.OPENGL | pygame.DOUBLEBUF)
 
     def init_keys(self):
-        self.SPEED = 10
+        self.SPEED = 40
         self.mouse_pressed = False
         self.mouse_pos_sum_x = 0
         self.mouse_pos_sum_y = 0
@@ -65,9 +62,9 @@ class OpenGLApp:
         if event.type == KEYDOWN:
             self.running = not (event.key == K_q)
             # cube.print()
-            if event.key == K_1:
+            if event.key == K_LEFT:
                 self.previous()
-            if event.key == K_2:
+            if event.key == K_RIGHT:
                 self.next()
         if event.type == MOUSEBUTTONDOWN:
             self.mouse_pressed = True
@@ -79,8 +76,8 @@ class OpenGLApp:
             elapsed_time = current_time - self.start_time
             self.start_pos = event.pos
             self.start_time = current_time
-            self.mouse_pos_sum_x += (delta_pos[0] * elapsed_time * self.SPEED)
-            self.mouse_pos_sum_y += (delta_pos[1] * elapsed_time * self.SPEED)
+            self.mouse_pos_sum_x -= (delta_pos[0] * elapsed_time * self.SPEED)
+            self.mouse_pos_sum_y -= (delta_pos[1] * elapsed_time * self.SPEED)
             camera.move(self.mouse_pos_sum_x, self.mouse_pos_sum_y)
             camera.apply_view_perspective(self.prog)
         if event.type == MOUSEBUTTONUP:
