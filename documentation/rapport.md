@@ -148,18 +148,24 @@ Concernant l'aspect graphique du cube, chaque petit cube comporte les 6 couleurs
 
 # Améliorations
 
-## Identification des faces du rubik's cube
+Ce projet est fonctionnel mais étant restreint au niveau du temps nous n'avons pas pu réaliser toutes améliorations que nous aurions aimé. Voici quelqu'unes des améliorations auquelles nous avons pensé.
 
-La méthode utilisée fonctionne très bien mais nécessite d'avoir un arrière-plan uniforme.
+## Identification d'une face du cube
 
-- TODO: Améliorations partie Bastien
+La détection du cube nécessite d'avoir un fond uni afin de bien fonctionner. La sélection des lignes représentant le pourtours du cube consiste pour l'instant à prendre les lignes les plus à l'extérieur. Une amélioration possible consisterait à identifier le plus grand carré. Ceci permetterai ainsi d'éviter qu'une ligne parasite ne viennent perturber l'extraction d'une face.
+
+## Détection des couleurs
+
+## Reconstruction du cube
+
+La reconstruction du cube se
 
 ## Affichage du rubik's cube
 
-TODO: Malik petit text
+TODO: Malik petit texte
 
 - Ajouter une animation de rotation des faces sur le cube en 3D
-- Ajouter une slider pour naviguer dans la ...TODO:
+- Ajouter un slider pour naviguer dans les étapes de résolution
 
 # Conclusion
 
@@ -168,3 +174,5 @@ TODO: Malik petit text
 \listoffigures
 
 # References
+
+TODO: None
