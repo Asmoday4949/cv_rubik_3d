@@ -44,7 +44,7 @@ Le but de ce projet était la réalisation d'une application permettant la déte
 
 # Configuration du programme
 
-Ce programme nécessite un certain nombre de package python. Nous avons utilisé un `venv` durant le dévelopement afin de faciliter l'intallation. Le fichier `requirements.txt` contient la liste des dépendances, pour créer le venv et installer celles-ci sur un système linux, vous pouvez executer les lignes de commandes suivantes. 
+Ce programme nécessite un certain nombre de package python. Nous avons utilisé un `venv` durant le dévelopement afin de faciliter l'intallation. Le fichier `requirements.txt` contient la liste des dépendances, pour créer le venv et installer celles-ci sur un système linux, vous pouvez executer les lignes de commandes suivantes.
 
 ```sh
 TODO: Ajouter VENV command lines
@@ -109,7 +109,19 @@ La variable cube étant une string définissant l'état du cube par exemple:
 
 ## Affichage du rubik's cube en 3D
 
-TODO: Malik
+L'affichage du cube est fait à l'aide de la bibliothèque python "ModernGL". Elle permet de faire du rendu à l'aide d'OpenGL.
+
+Le rubik's cube est décomposé en plusieurs petits cubes qui sont déplacés à l'aide de la matrice de translation.
+Ensuite, lorsqu'une rotation doit être faite sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
+Le fait d'effectuer la translation puis la rotation, cela veut dire que le centre de rotation d'un cube est en fait le centre de rotation du rubik's.
+Cela simplifie le positionnement des cubes dans l'espace lors des rotations des faces.
+
+Pour garder la trace de chaque cube au bon endroit, un tableau avec 3 dimensions est utilisé.
+Une fois qu'une rotation est effectuée sur l'affichage, le tableau de cubes est mis à jour afin de correspondre aux nouvelles positions de chaque cube tournée.
+
+Au tout début de l'application, le rubik's cube est construit sous sa forme résolue. On effectue les rotations inverses de la solution (qui est obtenue par la phase précédente, c'est-à-dire la résolution) afin d'obtenir le cube mélangé. On utilise ensuite la solution pour que l'utilisateur puisse voir les différentes rotations permettant la résolution.
+
+Concernant l'aspect graphique du cube, chaque petit cube comporte les 6 couleurs du rubik's cube. Les couleurs sont définies lors de la création du cube en lui même (tableau de couleurs passé aux shaders). Les bords noirs du cube sont fait dans le fragment shader. Pour cela, on regarde simplement quelle est la position dans la face du cube que nous sommes en train de traiter. Si cette position est proche d'un bord on affiche du noir, sinon on affiche la couleur correspondante à la face dans le tableau de couleurs passé au préalable.
 
 # Utilisation
 
@@ -122,6 +134,10 @@ TODO: Malik
 # Résultats
 
 
+
+# Améliorations
+
+- Ajouter une animation de rotation des faces sur le cube en 3D
 
 # Conclusion
 
