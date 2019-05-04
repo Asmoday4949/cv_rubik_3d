@@ -159,9 +159,11 @@ La détection du cube nécessite d'avoir un fond uni afin de bien fonctionner. L
 
 ## Détection des couleurs
 
+Le système actuel est très sensible à la luminosité ambiante et certaines couleurs peuvent être confondues. Une idée d'améliorations consisterait à scaner les faces les unes après les autres et d'ajuster la reconnaissances des couleurs au fur et à mesure du scan. Une fois toutes les faces scannées, on porrait ainsi utiliser de l'IA afin de répartir toutes les couleurs scannées en 6 catégories représentant chacune une couleur du cube. Cette technique permetterait ainsi de diminuer notre sensibilité à la luminosité.
+
 ## Reconstruction du cube
 
-La reconstruction du cube se
+La reconstruction du cube actuelle ne fonctionne que si les scan de toutes la faces a été effectuée et est 100% correct. Il serait intéressant d'améliorer le système afin de pouvoir détecter et voir même corriger certaines couleurs manquantes ou incorrectes.
 
 ## Affichage du rubik's cube
 
