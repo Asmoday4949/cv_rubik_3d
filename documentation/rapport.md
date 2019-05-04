@@ -130,7 +130,7 @@ La variable cube étant une string définissant l'état du cube par exemple:
 
 L'affichage du cube a été developpée à l'aide de la bibliothèque python "ModernGL". Celle-ci permet de faire du rendu à l'aide d'OpenGL.
 
-Le rubik's cube est décomposé en 81 petits cubes qui sont déplacés à l'aide de la matrice de translation.
+Le rubik's cube est décomposé en 27 petits cubes qui sont déplacés à l'aide de la matrice de translation.
 Ensuite, lorsqu'une rotation est effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
 Le fait d'effectuer la translation puis la rotation, cela veut dire que le centre de rotation d'un cube est en fait le centre de rotation du rubik's.
 Cela simplifie le positionnement des cubes dans l'espace lors des rotations des faces.
@@ -156,10 +156,10 @@ La méthode utilisée fonctionne très bien mais nécessite d'avoir un arrière-
 
 ## Affichage du rubik's cube
 
-TODO: Malik petit text
+L'affichage du rubik's cube est correct et fonctionnel. Cependant, il peut être améliorable d'un point de vue ergonomique. Voici quelques idées:
 
 - Ajouter une animation de rotation des faces sur le cube en 3D
-- Ajouter une slider pour naviguer dans la ...TODO:
+- Ajouter une slider pour naviguer dans les différentes étapes de résolution du rubik's cube
 
 # Conclusion
 
