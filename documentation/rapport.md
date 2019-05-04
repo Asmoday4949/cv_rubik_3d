@@ -47,7 +47,9 @@ Le but de ce projet était la réalisation d'une application permettant la déte
 Ce programme nécessite un certain nombre de package python. Nous avons utilisé un `venv` durant le dévelopement afin de faciliter l'intallation. Le fichier `requirements.txt` contient la liste des dépendances, pour créer le venv et installer celles-ci sur un système linux, vous pouvez executer les lignes de commandes suivantes.
 
 ```sh
-TODO: Ajouter VENV command lines
+virtualenv -p python3 venv
+. venv/bin/activate
+pip install -r requirements.txt
 ```
 
 En ce qui concerne les dépendances externes, il est nécessaire d'installer la bibliothèque:
@@ -76,23 +78,38 @@ Cette étape consistait à identifier l'emplacement d'une face du Rubik's cube d
 
 De nombreuses techniques existent notemment en recherchant une grille de 9 carrés. Cette technique est applicable pour les rubik's cube originaux dont chaque cube d'une facette est séparée par une bande de couleur noir comme sur l'image ci-dessous:
 
-![Original Rubik's cube](./images/rubikscube.jpg){width:70%}
+![Original Rubik's cube](./images/rubikscube.jpg){ width=70% }
 
 N'ayant disposition que des rubik's cube ou plus exactement des "Speed cube" sans bordure noire entre les faces comme sur l'images ci-dessous:
 
-![Speed cube utilisé](./images/speedcube.jpg){width:70%}
+![Speed cube utilisé](./images/speedcube.jpg){ width=70% }
 
 Il était dès lors beaucoup plus difficile de pouvoir détecter directement chaque carré composant une face du cube. La solution que nous avons trouvée et développée par du constat que la propriété principale du cube est il qu'il est composé de simples lignes. Ainsi l'idée a été d'effectuée une transformation de Hough et de trouver l'ensemble de lignes parralèles et perpendiculaires le plus représenté.
 
 Une fois ces lignes identifiées, nous prenons les lignes les plus à l'extérieur, ce qui nous donne par exemple les lignes en jaune sur l'image suivantes:
 
-![Extraction](./images/lines.png){width:70%}
+![Extraction](./images/lines.png){ width=70% }
 
 Nous pouvons ensuite extraire le carré centrale construit par ces 4 lignes pour extraire la face du rubik's cube.
 
 ## Reconnaissance des couleurs d'une face
 
-TODO: Lucas
+En premier on va découper l'image transformée en 9 parties (3x3) et on va encore réduire de quelques pixels sur les bords pour ne pas avoir les déchets du bord du rubiks cube. Ensuite on va faire une opération mathématique sur l'ensemble des pixels pour récupérer une seule couleur plutôt qu'une image 2 dimenssions.
+
+L'opération mathématique est très simple à changer car on peut la passer en paramètre de la méthode. Nous avons essayé avec une médiane et une moyenne, et la moyenne est plus adapté à notre cas d'utilisation.
+
+Pour la reconnaissance des couleurs, nous sommes parties sur une base d'un article comparant les différents type de représentation de couleur disponibles [@Couleurs]. Ensuite nous avons fait des tests pour voir quelle valeur correspondait avec quelle type de couleur.
+
+Et nous sommes arrivés à ce résultat : 
+
+Couleur     Condition RGB       Condition HSV
+-------     ----------------    --------------   
+**bleu**    -                   90 < H < 120
+**blanc**   Ecart type < 40     -
+**orange**  -                   H < 15 
+**rouge**   G < 48              H < 190
+**jaune**   G > 50              10 < H < 30
+**vert**    -                   60 < H < 90
 
 ## Reconstruction du rubik's cube
 
@@ -144,9 +161,42 @@ Concernant l'aspect graphique du cube, chaque petit cube comporte les 6 couleurs
 
 # Utilisation
 
+La première chose a faire est d'installer le setup pour reconnaitre le rubik's cube. Nous avons testé notre programme avec ce setup :
+
+![Setup d'exécution](images/setup3.png)
+
+Les 3 éléments importants sont :
+
+1. Une caméra (ici, webcam de l'ordinateur)
+2. Une lampe
+3. Le rubik's cube face à la caméra
+
+Il est très important que le rubik's cube soit face à la caméra. Il faut aussi que le rubik's cube soit sur une surface plane sans ligne droit (bord de portable ou bord de table).
+
+Pour utiliser le programme, il faut lancer le script `rubik_cv.py` avec python. Pour ça on va utiliser l'environment virtuel python qui a été paramètré précédemment.
+
+```sh
+. venv/bin/activate
+python rubik_cv.py
+```
+
+Une fois le programme lancé, deux fenêtre vont s'ouvrir, une de la caméra avec les lignes Hough et une avec l'image transformée. Il faut positionner le cube pour avoir une image transformée stable comme ceci : 
+
+![Exécution - Image stable](images/screenshot2.png)
+
+Après cela, il faut appuyer sur la touche d du clavier. On peut voir les couleurs scannées sur l'écran de la console.
+
+Une fois les 6 faces scannées, on peut voir la simulation 3D du rubik's cube s'affiché. On peut voir chaqué étape en appuyant sur les flèches du clavier et faire des rotations avec la souris.
+
 # Résultats
 
 # Améliorations
+
+Le programme actuelle est fonctionnelle mais l'efficacité serait grandement meilleure avec quelques améliorations.
+
+## Reconnaissance des couleurs 
+
+Idéalement, il faudrait reconnaitre les images avec un algorithme type machine learning de clustering, comme vu dans le cours d'IA. Cela permettrait d'identifier les 6 couleurs sans avoir à ce soucier des différentes valeurs.  
 
 ## Identification des faces du rubik's cube
 
