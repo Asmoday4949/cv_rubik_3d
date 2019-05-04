@@ -131,8 +131,11 @@ La variable cube étant une string définissant l'état du cube par exemple:
 L'affichage du cube a été developpée à l'aide de la bibliothèque python "ModernGL". Celle-ci permet de faire du rendu à l'aide d'OpenGL.
 
 Le rubik's cube est décomposé en 27 petits cubes qui sont déplacés à l'aide de la matrice de translation.
-Ensuite, lorsqu'une rotation est effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
-Le fait d'effectuer la translation puis la rotation, cela veut dire que le centre de rotation d'un cube est en fait le centre de rotation du rubik's.
+Ensuite, lorsqu'une rotation doit être effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
+Le fait d'appliquer la translation puis la rotation, les cubes de la face vont être pivotés en fonction du décalage. Voici en image le principe:
+
+![Principe translation-rotation](./images/principe_rotation.png){width:100%}
+
 Cela simplifie le positionnement des cubes dans l'espace lors des rotations des faces.
 
 Pour garder la trace de chaque cube au bon endroit, un tableau avec 3 dimensions est utilisé.
