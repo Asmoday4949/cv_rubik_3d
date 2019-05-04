@@ -3,9 +3,9 @@ title: Résolution de Rubik's Cube
 subtitle: Traîtement d'image
 lang: fr
 author:
-- Bulloni Lucas <lucas.bulloni@he-arc.ch>
-- Fleury Malik <malik.fleury@he-arc.ch>
-- Wermeille Bastien <bastien.wermeille@he-arc.ch>
+  - Bulloni Lucas <lucas.bulloni@he-arc.ch>
+  - Fleury Malik <malik.fleury@he-arc.ch>
+  - Wermeille Bastien <bastien.wermeille@he-arc.ch>
 date: \today
 pagesize: A4
 numbersections: true
@@ -13,11 +13,11 @@ documentclass: scrartcl
 geometry: margin=2.5cm
 bibliography: rapport.bib
 header-includes: |
-      \usepackage{fancyhdr}
-      \pagestyle{fancy}
-      \fancyhead[R]{Lucas Bulloni, Malik Fleury \& Bastien Wermeille}
-      \usepackage{float}
-      \floatplacement{figure}{H}
+  \usepackage{fancyhdr}
+  \pagestyle{fancy}
+  \fancyhead[R]{Lucas Bulloni, Malik Fleury \& Bastien Wermeille}
+  \usepackage{float}
+  \floatplacement{figure}{H}
 ---
 
 \newpage
@@ -36,7 +36,7 @@ Pour la bonne exécution du programme, il vous installer le matériel **dans** l
 
 - Caméra
 - Rubik's cube
-- *Optionnel :* Lampe
+- _Optionnel :_ Lampe
 
 La lampe permet d'avoir un meilleur résultat pour la détection de la position du cube et la détection des couleurs.
 
@@ -51,6 +51,7 @@ TODO: Ajouter VENV command lines
 ```
 
 En ce qui concerne les dépendances externes, il est nécessaire d'installer la bibliothèque:
+
 - kociemba
 
 Installable de la manière suivante :
@@ -71,8 +72,23 @@ Ce projet a été séparé en 5 étapes distinctes qui sont les suivantes:
 
 ## Détection d'une face du rubik's cube
 
+Cette étape consistait à identifier l'emplacement d'une face du Rubik's cube dans une image et à l'extraire.
 
-TODO: Bastien
+De nombreuses techniques existent notemment en recherchant une grille de 9 carrés. Cette technique est applicable pour les rubik's cube originaux dont chaque cube d'une facette est séparée par une bande de couleur noir comme sur l'image ci-dessous:
+
+![Original Rubik's cube](./images/rubikscube.jpg){width:70%}
+
+N'ayant disposition que des rubik's cube ou plus exactement des "Speed cube" sans bordure noire entre les faces comme sur l'images ci-dessous:
+
+![Speed cube utilisé](./images/speedcube.jpg){width:70%}
+
+Il était dès lors beaucoup plus difficile de pouvoir détecter directement chaque carré composant une face du cube. La solution que nous avons trouvée et développée par du constat que la propriété principale du cube est il qu'il est composé de simples lignes. Ainsi l'idée a été d'effectuée une transformation de Hough et de trouver l'ensemble de lignes parralèles et perpendiculaires le plus représenté.
+
+Une fois ces lignes identifiées, nous prenons les lignes les plus à l'extérieur, ce qui nous donne par exemple les lignes en jaune sur l'image suivantes:
+
+![Extraction](./images/lines.png){width:70%}
+
+Nous pouvons ensuite extraire le carré centrale construit par ces 4 lignes pour extraire la face du rubik's cube.
 
 ## Reconnaissance des couleurs d'une face
 
@@ -83,7 +99,8 @@ TODO: Lucas
 Les deux étapes précédentes permettant d'isoler chaque face et de reconnaitre leurs différentes couleurs, l'étape suivante était de remettre dans l'ordres les différentes faces du cube afin que celui-ci soit valide.
 
 Cette étape consistait en deux points essentiels:
-1. Détecter si l'ensemble des faces permettaient de reconstruire un  rubik's cube valide
+
+1. Détecter si l'ensemble des faces permettaient de reconstruire un rubik's cube valide
 2. Reconstruire le rubik's cube
 
 Lors du développement nous avons écris nos propres tests afin de tester si le cube était valide notemment en comptant le nombre de couleurs totales mais celà ne suffisait pas alors nous avons décider d'utiliser la bibliothèque `kociemba` permettant de valider si un rubik's cube était valide.
@@ -99,20 +116,22 @@ Cette opération peut paraître conteuse mais le nombre de cas à tester est tr�
 La résolution du rubik's n'a pas étée développée par nos soins car ce travail n'était pas le point central du projet. Nous avons utilisé l'algporithme de Kociemba afin d'effectuer cette étape.
 
 Le code nécessaire a cette partie est relativement simple et est le suivant:
+
 ```python
 import kociemba
 solution = kociemba.solve(cube)
 ```
 
 La variable cube étant une string définissant l'état du cube par exemple:
+
 - `BBRUUUUDFBRUURRBBDLFFFFFRFBDLFDDDFDDLBDLLLRLRLBUUBRURL`.
 
 ## Affichage du rubik's cube en 3D
 
-L'affichage du cube est fait à l'aide de la bibliothèque python "ModernGL". Elle permet de faire du rendu à l'aide d'OpenGL.
+L'affichage du cube a été developpée à l'aide de la bibliothèque python "ModernGL". Celle-ci permet de faire du rendu à l'aide d'OpenGL.
 
-Le rubik's cube est décomposé en plusieurs petits cubes qui sont déplacés à l'aide de la matrice de translation.
-Ensuite, lorsqu'une rotation doit être faite sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
+Le rubik's cube est décomposé en 81 petits cubes qui sont déplacés à l'aide de la matrice de translation.
+Ensuite, lorsqu'une rotation est effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
 Le fait d'effectuer la translation puis la rotation, cela veut dire que le centre de rotation d'un cube est en fait le centre de rotation du rubik's.
 Cela simplifie le positionnement des cubes dans l'espace lors des rotations des faces.
 
@@ -125,19 +144,22 @@ Concernant l'aspect graphique du cube, chaque petit cube comporte les 6 couleurs
 
 # Utilisation
 
-
-
-# Méthode et solution
-
-
-
 # Résultats
-
-
 
 # Améliorations
 
+## Identification des faces du rubik's cube
+
+La méthode utilisée fonctionne très bien mais nécessite d'avoir un arrière-plan uniforme.
+
+- TODO: Améliorations partie Bastien
+
+## Affichage du rubik's cube
+
+TODO: Malik petit text
+
 - Ajouter une animation de rotation des faces sur le cube en 3D
+- Ajouter une slider pour naviguer dans la ...TODO:
 
 # Conclusion
 
