@@ -51,7 +51,7 @@ Ce programme nécessite un certain nombre de package python. Nous avons utilisé
 ```sh
 virtualenv -p python3 venv
 . venv/bin/activate
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 ```
 
 En ce qui concerne les dépendances externes, il est nécessaire d'installer la bibliothèque:
@@ -111,16 +111,18 @@ L'opération mathématique est très simple à changer car on peut la passer en 
 
 Pour la reconnaissance des couleurs, nous sommes parties sur une base d'un article comparant les différents type de représentation de couleur disponibles [@Couleurs]. Ensuite nous avons fait des tests pour voir quelle valeur correspondait avec quelle type de couleur.
 
-Et nous sommes arrivés à ce résultat : 
+Et nous sommes arrivés à ce résultat :
 
-Couleur     Condition RGB       Condition HSV
--------     ----------------    --------------   
-**bleu**    -                   90 < H < 120
-**blanc**   Ecart type < 40     -
-**orange**  -                   H < 15 
-**rouge**   G < 48              H < 190
-**jaune**   G > 50              10 < H < 30
-**vert**    -                   60 < H < 90
+Couleur Condition RGB Condition HSV
+
+---
+
+**bleu** - 90 < H < 120
+**blanc** Ecart type < 40 -
+**orange** - H < 15
+**rouge** G < 48 H < 190
+**jaune** G > 50 10 < H < 30
+**vert** - 60 < H < 90
 
 ## Reconstruction du rubik's cube
 
@@ -194,7 +196,7 @@ Pour utiliser le programme, il faut lancer le script `rubik_cv.py` avec python. 
 python rubik_cv.py
 ```
 
-Une fois le programme lancé, deux fenêtre vont s'ouvrir, une de la caméra avec les lignes Hough et une avec l'image transformée. Il faut positionner le cube pour avoir une image transformée stable comme ceci : 
+Une fois le programme lancé, deux fenêtre vont s'ouvrir, une de la caméra avec les lignes Hough et une avec l'image transformée. Il faut positionner le cube pour avoir une image transformée stable comme ceci :
 
 ![Exécution - Image stable](images/screenshot2.png)
 
@@ -210,10 +212,6 @@ TODO:
 
 Le programme actuelle est fonctionnelle mais l'efficacité serait grandement meilleure avec quelques améliorations.
 
-## Reconnaissance des couleurs 
-
-Idéalement, il faudrait reconnaitre les images avec un algorithme type machine learning de clustering, comme vu dans le cours d'IA. Cela permettrait d'identifier les 6 couleurs sans avoir à ce soucier des différentes valeurs.  
-
 ## Identification des faces du rubik's cube
 
 Ce projet est fonctionnel mais étant restreint au niveau du temps nous n'avons pas pu réaliser toutes améliorations que nous aurions aimé. Voici quelqu'unes des améliorations auxquelles nous avons pensé.
@@ -222,20 +220,22 @@ Ce projet est fonctionnel mais étant restreint au niveau du temps nous n'avons 
 
 La détection du cube nécessite d'avoir un fond uni afin de bien fonctionner. La sélection des lignes représentant le pourtours du cube consiste pour l'instant à prendre les lignes les plus à l'extérieur. Une amélioration possible consisterait à identifier le plus grand carré. Ceci permetterai ainsi d'éviter qu'une ligne parasite ne viennent perturber l'extraction d'une face.
 
-## Détection des couleurs
+## Reconnaissance des couleurs
 
-Le système actuel est très sensible à la luminosité ambiante et certaines couleurs peuvent être confondues. Une idée d'améliorations consisterait à scaner les faces les unes après les autres et d'ajuster la reconnaissances des couleurs au fur et à mesure du scan. Une fois toutes les faces scannées, on porrait ainsi utiliser de l'IA afin de répartir toutes les couleurs scannées en 6 catégories représentant chacune une couleur du cube. Cette technique permetterait ainsi de diminuer notre sensibilité à la luminosité.
+Le système actuel est très sensible à la luminosité ambiante et certaines couleurs peuvent être confondues. Une idée d'améliorations consisterait à scaner toutes faces et d'utiliser un algorithme type machine learning de clustering, comme vu dans le cours d'IA, pour l'identification des couleurs.
+
+Cela permettrait d'identifier les 6 couleurs sans avoir à ce soucier de la luminosité ambiante.
 
 ## Reconstruction du cube
 
-La reconstruction du cube actuelle ne fonctionne que si les scan de toutes la faces a été effectuée et est 100% correct. Il serait intéressant d'améliorer le système afin de pouvoir détecter et voir même corriger certaines couleurs manquantes ou incorrectes.
+La reconstruction du cube actuelle ne fonctionne que si les scan de toutes la faces a été effectuée et sont 100% correct. Il serait intéressant d'améliorer le système afin de pouvoir détecter et voir même corriger certaines couleurs manquantes ou incorrectes.
 
 ## Affichage du rubik's cube
 
 L'affichage du rubik's cube est correct et fonctionnel. Cependant, il peut être améliorable d'un point de vue ergonomique. Voici quelques idées:
 
 - Ajouter une animation de rotation des faces sur le cube en 3D
-- Ajouter une slider pour naviguer dans les différentes étapes de résolution du rubik's cube
+- Ajouter un slider pour naviguer dans les différentes étapes de résolution du rubik's cube
 
 # Conclusion
 
@@ -246,4 +246,3 @@ TODO:
 \listoffigures
 
 # References
-
