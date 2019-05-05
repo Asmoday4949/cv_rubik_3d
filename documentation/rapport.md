@@ -28,6 +28,8 @@ header-includes: |
 
 # Introduction
 
+Dans le cadre du cours de traitement d'image en 3ème année, nous avons réalisé un projet à choix. Nous avons choisi de faire un programme qui permettait d'aider un utilisateur à résoudre un Rubik's cube. Le but est de scanner les différentes faces les unes après les autres puis de faire une simulation 3D avec les différentes étapes de résolution. Le projet a été réalisé en Python avec principalement la bibliothèque OpenCV
+
 # Configuration d'exécution
 
 Pour la bonne exécution du programme, il vous installer le matériel **dans** la manière optimale.
@@ -61,6 +63,15 @@ Installable de la manière suivante :
 ```sh
 sudo apt install kociemba
 ```
+
+## Bibliothèques principales
+
+Pour réaliser ce projet, nous avons majoritairement utilisé 4 bibliothèques :
+
+- OpenCV : traitement d'image
+- Numpy : Opérations mathématiques
+- PyGame : 3D // TODO MALIK FAUT CHECKER
+- Kociemba : ALgorithme de résolution de Rubik's cube // TODO BASTIEN CHECKER
 
 # Fonctionnement et Architecture
 
