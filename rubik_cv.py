@@ -75,14 +75,14 @@ def rubik_cv():
     """
     main code execution
     """
-    faces = detect_faces()
-    print(faces)
-    cube = reconstruct(faces)
-    print(cube)
-    solution = kociemba.solve(cube)
-    print(solution)
+    # faces = detect_faces()
+    # print(faces)
+    # cube = reconstruct(faces)
+    # print(cube)
+    # solution = kociemba.solve(cube)
+    # print(solution)
 
-    gl_app = OpenGLApp(solution)
+    gl_app = OpenGLApp("F F F")
     gl_app.run()
 
 

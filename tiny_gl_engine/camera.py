@@ -23,7 +23,6 @@ class Camera:
         return math.cos(value) / math.sin(value)
 
     def create_perspective_matrix(self, fov, aspect, near, far):
-<<<<<<< HEAD
         """ Create the perspective matrix """
         perspective = pyrr.matrix44.create_perspective_projection_matrix(fov, aspect, near, far)
         self.perspective = perspective
@@ -33,16 +32,6 @@ class Camera:
         eye = numpy.array([0.0,0.0,10.0])
         target = numpy.array([0.0,0.0,0.0])
         up = numpy.array([0.0,1.0,0.0])
-=======
-        perspective = pyrr.matrix44.create_perspective_projection_matrix(
-            fov, aspect, near, far)
-        self.perspective = perspective
-
-    def create_view_matrix(self):
-        eye = numpy.array([0.0, 0.0, 10.0])
-        target = numpy.array([0.0, 0.0, 0.0])
-        up = numpy.array([0.0, 1.0, 0.0])
->>>>>>> 0e2cf85e4892b601f6e3c033206fd46cf874f8f4
         view = pyrr.matrix44.create_look_at(eye, target, up)
         self.initial_view = self.view = view
 
