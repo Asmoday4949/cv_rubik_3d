@@ -28,7 +28,7 @@ header-includes: |
 
 # Introduction
 
-Dans le cadre du cours de traitement d'image en 3e année, nous avons réalisé un projet à choix. Nous avons choisi de faire un programme qui permettait d'aider un utilisateur à résoudre un Rubik's cube. Le but est de scanner les différentes faces les unes après les autres puis de proposer à l'utilisateur une rendu 3D du cube avec la possibilité de naviguer entre les différentes étapes de résolution. Le projet a été réalisé en Python avec principalement la bibliothèque OpenCV.
+Dans le cadre du cours de traitement d'image en 3e année, nous avons réalisé un projet à choix. Nous avons choisi de faire un programme qui permetterait d'aider un utilisateur à résoudre un Rubik's cube. Le but est de scanner les différentes faces les unes après les autres puis de proposer à l'utilisateur une rendu 3D du cube avec la possibilité de naviguer entre les différentes étapes de résolution. Le projet a été réalisé en Python avec principalement la bibliothèque OpenCV.
 
 # Configuration d'exécution
 
@@ -66,11 +66,12 @@ sudo apt install kociemba
 
 ## Bibliothèques principales
 
-Pour réaliser ce projet, nous avons majoritairement utilisé 4 bibliothèques :
+Pour réaliser ce projet, nous avons majoritairement utilisé 5 bibliothèques :
 
-- OpenCV : traitement d'image
+- OpenCV : Traitement d'image
 - Numpy : Opérations mathématiques
-- PyGame : 3D // TODO MALIK FAUT CHECKER
+- PyGame : Création de fenêtre et gestion des entrées utilisateur
+- ModernGL : Rendu 3D avec OpenGL en python
 - Kociemba : ALgorithme de résolution de Rubik's cube // TODO BASTIEN CHECKER
 
 # Fonctionnement et Architecture
@@ -196,7 +197,7 @@ Pour utiliser le programme, il faut lancer le script `rubik_cv.py` avec python. 
 python rubik_cv.py
 ```
 
-Une fois le programme lancé, deux fenêtre vont s'ouvrir, une de la caméra avec les lignes Hough et une avec l'image transformée. Il faut positionner le cube pour avoir une image transformée stable comme ceci :
+Une fois le programme lancé, deux fenêtres vont s'ouvrir, une de la caméra avec les lignes Hough et une avec l'image transformée. Il faut positionner le cube pour avoir une image transformée stable comme ceci :
 
 ![Exécution - Image stable](images/screenshot2.png)
 
