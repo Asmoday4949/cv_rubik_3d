@@ -6,14 +6,15 @@
 __author__ = "Lucas Bulloni, Malik Fleury, Bastien Wermeille"
 __version__ = "1.0.0"
 
-import kociemba
+import numpy as np
+
 from color_enum import Color
 from pykociemba import tools
 
-import numpy as np
-
 
 def cube_to_string(rubik):
+    """Return the string version of a cube
+    """
     data = {
         Color.BLUE: 'U',
         Color.WHITE: 'F',
@@ -39,6 +40,10 @@ def cube_to_string(rubik):
 
 
 def reconstruct(rubik):
+    """Reconstruct the cube given a list of faces
+
+    Return the valid cube
+    """
     faces = {}
     for face in rubik:
         faces[face[1][1]] = np.transpose(np.array(face))
@@ -53,8 +58,7 @@ def reconstruct(rubik):
                             cube = cube_to_string(faces)
                             valid = tools.verify(cube)
                             if valid == 0:
-                                print("Found it")
-                                print(valid)
+                                print("Valid cube found")
                                 print(cube)
                                 return cube
                             faces[Color.YELLOW] = np.rot90(faces[Color.YELLOW])
@@ -70,7 +74,7 @@ def reconstruct(rubik):
 
 
 if __name__ == '__main__':
-    # Here is some example to run
+    # Test with a valid cube
     test = [[[Color.WHITE, Color.WHITE, Color.WHITE], [Color.GREEN, Color.GREEN, Color.GREEN], [Color.GREEN, Color.GREEN, Color.GREEN]],
             [[Color.RED, Color.RED, Color.RED], [Color.RED, Color.RED,
                                                  Color.RED], [Color.RED, Color.RED, Color.RED]],

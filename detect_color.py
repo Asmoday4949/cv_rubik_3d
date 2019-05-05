@@ -8,8 +8,8 @@ __version__ = "1.0.0"
 
 import numpy as np
 import cv2 as cv
+
 from color_enum import Color
-import os
 
 
 def detect_color(image, square_zone):

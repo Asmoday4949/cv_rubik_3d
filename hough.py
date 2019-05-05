@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""face_detection.py: Identify a face of a rubik's cube in an image"""
+"""hough.py: Tools comming from https://github.com/alkasm/cvtools"""
 
-__author__ = "Lucas Bulloni, Malik Fleury, Bastien Wermeille"
-__version__ = "1.0.0"
+__author__ = "https://github.com/alkasm/cvtools"
 
 
 import cv2
