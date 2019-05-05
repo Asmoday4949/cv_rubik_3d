@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""open_gl_app.py: 3D application of the rubik's cube"""
+
+__author__ = "Lucas Bulloni, Malik Fleury, Bastien Wermeille"
+__version__ = "1.0.0"
+
 import struct
 import moderngl
 import pygame
@@ -12,6 +20,7 @@ from tiny_gl_engine.camera import *
 
 class OpenGLApp:
     def __init__(self, rules):
+        """ Init all the stuff """
         self.init_screen()
         self.init_keys()
         self.context = create_context()
@@ -22,6 +31,7 @@ class OpenGLApp:
         self.randomize()
 
     def init_screen(self):
+        """ Init the screen """
         self.size = [1024, 720]
         self.running = True
         pygame.init()
@@ -30,6 +40,7 @@ class OpenGLApp:
             self.size, pygame.OPENGL | pygame.DOUBLEBUF)
 
     def init_keys(self):
+        """ Init data for camera mouvements """
         self.SPEED = 40
         self.mouse_pressed = False
         self.mouse_pos_sum_x = 0
@@ -37,16 +48,19 @@ class OpenGLApp:
         self.start_time = 0
 
     def init_parser(self, rule):
+        """ Parse the solution and create the reversed solution """
         self.orders = rule.split(' ')
         self.reversed_orders = self.inverse_orders(self.orders)
         self.current_index = len(self.orders)
         self.start_time = time.time()
 
     def randomize(self):
+        """ Execute rotation (inverse order) to get the mixed rubik's cube """
         for i in range(0, len(self.reversed_orders)):
             self.previous()
 
     def run(self):
+        """ Main of the program """
         context = self.context
         context.enable(moderngl.DEPTH_TEST)
         cube = self.cube
@@ -59,6 +73,7 @@ class OpenGLApp:
         pygame.quit()
 
     def handle_keys_event(self, event):
+        """ Handle the keys pressed (Camera, next and previous rotations) """
         camera = self.camera
         cube = self.cube
         if event.type == KEYDOWN:
@@ -87,6 +102,7 @@ class OpenGLApp:
             self.mouse_pressed = False
 
     def inverse_orders(self, orders):
+        """ Create the array of inversed orders """
         inversed_orders = []
         for order in orders:
             if '2' in order:
@@ -98,14 +114,15 @@ class OpenGLApp:
         return inversed_orders
 
     def previous(self):
-        orders = self.reversed_orders
+        """ Execute the previous rotation """
+        orders = self.reversed_orders;
         if self.current_index > 0:
             self.current_index -= 1
             order = orders[self.current_index]
             self.execute_order(order)
-            print(self.current_index)
 
     def next(self):
+        """ Execute the next rotation """
         orders = self.orders
         if self.current_index < len(orders):
             order = orders[self.current_index]
@@ -113,6 +130,7 @@ class OpenGLApp:
             self.current_index += 1
 
     def execute_order(self, order):
+        """ Transform string order into rotation """
         cube = self.cube
 
         if order == 'F2':
@@ -161,23 +179,27 @@ class OpenGLApp:
             cube.rotate_y(0, True)
 
     def load_shaders(self):
+        """ Loads shaders (vertex and fragment) """
         context = self.context
         self.prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/cube_vertex.glsl',
                                  'tiny_gl_engine/primitives/shaders/cube_fragment.glsl')
 
     def build_camera(self):
+        """ Create the camera """
         size = self.size
         camera = Camera(70.0, size[0]/size[1], 0.1, 1000.0)
         camera.setup_shader(self.prog)
         self.camera = camera
 
     def build_rubiks_cube(self):
+        """ Create the rubik's cube """
         cube = RubiksCube(self.context)
         cube.setup_shaders(self.prog)
         cube.create_geometry()
         self.cube = cube
 
     def build_cube(self):
+        """ Build a cube (test purpose) """
         cube = Cube(self.context)
         cube.setup_shader(self.prog)
         cube.create_geometry()
