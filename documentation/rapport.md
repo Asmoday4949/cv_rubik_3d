@@ -207,10 +207,6 @@ Une fois les 6 faces scannées, on peut voir la simulation 3D du rubik's cube s'
 
 # Améliorations
 
-Le programme actuel est fonctionnel, mais l'efficacité serait grandement meilleure avec quelques améliorations.
-
-## Identification des faces du rubik's cube
-
 Ce projet est fonctionnel, mais étant restreints au niveau du temps nous n'avons pas pu réaliser toutes les améliorations que nous aurions souhaité. Voici quelques-unes des améliorations auxquelles nous avons pensé.
 
 ## Identification d'une face du cube
