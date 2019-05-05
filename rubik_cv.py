@@ -75,7 +75,22 @@ def rubik_cv():
     """
     main code execution
     """
+
     faces = detect_faces()
+    # To skip face color detection and use a preset uncoment the following lines and comment the preceding line.
+
+    # from color_enum import Color
+    # faces = [[[Color.WHITE, Color.WHITE, Color.WHITE], [Color.GREEN, Color.GREEN, Color.GREEN], [Color.GREEN, Color.GREEN, Color.GREEN]],
+    #          [[Color.RED, Color.RED, Color.RED], [Color.RED, Color.RED,
+    #                                               Color.RED], [Color.RED, Color.RED, Color.RED]],
+    #          [[Color.YELLOW, Color.YELLOW, Color.YELLOW], [Color.BLUE,
+    #                                                        Color.BLUE, Color.BLUE], [Color.BLUE, Color.BLUE, Color.BLUE]],
+    #          [[Color.ORANGE, Color.ORANGE, Color.ORANGE], [Color.ORANGE, Color.ORANGE,
+    #                                                        Color.ORANGE], [Color.ORANGE, Color.ORANGE, Color.ORANGE]],
+    #          [[Color.BLUE, Color.BLUE, Color.BLUE], [Color.WHITE, Color.WHITE,
+    #                                                  Color.WHITE], [Color.WHITE, Color.WHITE, Color.WHITE]],
+    #          [[Color.GREEN, Color.GREEN, Color.GREEN], [Color.YELLOW, Color.YELLOW, Color.YELLOW], [Color.YELLOW, Color.YELLOW, Color.YELLOW]]]
+
     print(faces)
     cube = reconstruct(faces)
     print(cube)
