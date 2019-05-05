@@ -76,17 +76,17 @@ Cette étape consistait à identifier l'emplacement d'une face du Rubik's cube d
 
 De nombreuses techniques existent notemment en recherchant une grille de 9 carrés. Cette technique est applicable pour les rubik's cube originaux dont chaque cube d'une facette est séparée par une bande de couleur noir comme sur l'image ci-dessous:
 
-![Original Rubik's cube](./images/rubikscube.jpg){width:70%}
+![Original Rubik's cube](./images/rubikscube.jpg){width=70%}
 
 N'ayant disposition que des rubik's cube ou plus exactement des "Speed cube" sans bordure noire entre les faces comme sur l'images ci-dessous:
 
-![Speed cube utilisé](./images/speedcube.jpg){width:70%}
+![Speed cube utilisé](./images/speedcube.jpg){width=70%}
 
 Il était dès lors beaucoup plus difficile de pouvoir détecter directement chaque carré composant une face du cube. La solution que nous avons trouvée et développée par du constat que la propriété principale du cube est il qu'il est composé de simples lignes. Ainsi l'idée a été d'effectuée une transformation de Hough et de trouver l'ensemble de lignes parralèles et perpendiculaires le plus représenté.
 
 Une fois ces lignes identifiées, nous prenons les lignes les plus à l'extérieur, ce qui nous donne par exemple les lignes en jaune sur l'image suivantes:
 
-![Extraction](./images/lines.png){width:70%}
+![Extraction](./images/lines.png){width=70%}
 
 Nous pouvons ensuite extraire le carré centrale construit par ces 4 lignes pour extraire la face du rubik's cube.
 
@@ -134,7 +134,7 @@ Le rubik's cube est décomposé en 27 petits cubes qui sont déplacés à l'aide
 Ensuite, lorsqu'une rotation doit être effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
 Le fait d'appliquer la translation puis la rotation, les cubes de la face vont être pivotés en fonction du décalage. Voici en image le principe:
 
-![Principe translation-rotation](./images/principe_rotation.png){width:100%}
+![Principe translation-rotation](./images/principe_rotation.png){width=100%}
 
 Cela simplifie le positionnement des cubes dans l'espace lors des rotations des faces.
 
@@ -147,11 +147,15 @@ Concernant l'aspect graphique du cube, chaque petit cube comporte les 6 couleurs
 
 # Utilisation
 
+TODO:
+
 # Résultats
+
+TODO:
 
 # Améliorations
 
-Ce projet est fonctionnel mais étant restreint au niveau du temps nous n'avons pas pu réaliser toutes améliorations que nous aurions aimé. Voici quelqu'unes des améliorations auquelles nous avons pensé.
+Ce projet est fonctionnel mais étant restreint au niveau du temps nous n'avons pas pu réaliser toutes améliorations que nous aurions aimé. Voici quelqu'unes des améliorations auxquelles nous avons pensé.
 
 ## Identification d'une face du cube
 
@@ -173,6 +177,8 @@ L'affichage du rubik's cube est correct et fonctionnel. Cependant, il peut être
 - Ajouter une slider pour naviguer dans les différentes étapes de résolution du rubik's cube
 
 # Conclusion
+
+TODO:
 
 \newpage
 
