@@ -24,14 +24,15 @@ class Camera:
 
     def create_perspective_matrix(self, fov, aspect, near, far):
         """ Create the perspective matrix """
-        perspective = pyrr.matrix44.create_perspective_projection_matrix(fov, aspect, near, far)
+        perspective = pyrr.matrix44.create_perspective_projection_matrix(
+            fov, aspect, near, far)
         self.perspective = perspective
 
     def create_view_matrix(self):
         """ Create the view matrix """
-        eye = numpy.array([0.0,0.0,10.0])
-        target = numpy.array([0.0,0.0,0.0])
-        up = numpy.array([0.0,1.0,0.0])
+        eye = numpy.array([0.0, 0.0, 10.0])
+        target = numpy.array([0.0, 0.0, 0.0])
+        up = numpy.array([0.0, 1.0, 0.0])
         view = pyrr.matrix44.create_look_at(eye, target, up)
         self.initial_view = self.view = view
 
