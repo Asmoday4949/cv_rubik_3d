@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""cube.py: Represent a rubik's cube """
+
+__author__ = "Lucas Bulloni, Malik Fleury, Bastien Wermeille"
+__version__ = "1.0.0"
+
 import struct
 import numpy
 import pyrr
