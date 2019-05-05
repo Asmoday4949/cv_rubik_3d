@@ -1,3 +1,11 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""rubik_cv.py: enum for every color of the cube"""
+
+__author__ = "Lucas Bulloni, Malik Fleury, Bastien Wermeille"
+__version__ = "1.0.0"
+
 import numpy as np
 import cv2 as cv
 import sys
@@ -8,7 +16,9 @@ from face_detection import detect_lines
 from tiny_gl_engine.open_gl_app import OpenGLApp
 
 def detect_faces(square_zone = None):
-
+    """
+    main code to detect faces and manage user input
+    """
     faces = []
     faces_in = set()
 
@@ -64,6 +74,9 @@ def detect_faces(square_zone = None):
 import kociemba
 
 def rubik_cv():
+    """
+    main code execution
+    """
     faces = detect_faces()
     print(faces)
     cube = reconstruct(faces)
