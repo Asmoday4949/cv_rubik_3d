@@ -78,17 +78,17 @@ Cette étape consistait à identifier l'emplacement d'une face du Rubik's cube d
 
 De nombreuses techniques existent notemment en recherchant une grille de 9 carrés. Cette technique est applicable pour les rubik's cube originaux dont chaque cube d'une facette est séparée par une bande de couleur noir comme sur l'image ci-dessous:
 
-![Original Rubik's cube](./images/rubikscube.jpg){ width=70% }
+![Original Rubik's cube](./images/rubikscube.jpg){width=70%}
 
 N'ayant disposition que des rubik's cube ou plus exactement des "Speed cube" sans bordure noire entre les faces comme sur l'images ci-dessous:
 
-![Speed cube utilisé](./images/speedcube.jpg){ width=70% }
+![Speed cube utilisé](./images/speedcube.jpg){width=70%}
 
 Il était dès lors beaucoup plus difficile de pouvoir détecter directement chaque carré composant une face du cube. La solution que nous avons trouvée et développée par du constat que la propriété principale du cube est il qu'il est composé de simples lignes. Ainsi l'idée a été d'effectuée une transformation de Hough et de trouver l'ensemble de lignes parralèles et perpendiculaires le plus représenté.
 
 Une fois ces lignes identifiées, nous prenons les lignes les plus à l'extérieur, ce qui nous donne par exemple les lignes en jaune sur l'image suivantes:
 
-![Extraction](./images/lines.png){ width=70% }
+![Extraction](./images/lines.png){width=70%}
 
 Nous pouvons ensuite extraire le carré centrale construit par ces 4 lignes pour extraire la face du rubik's cube.
 
@@ -147,9 +147,12 @@ La variable cube étant une string définissant l'état du cube par exemple:
 
 L'affichage du cube a été developpée à l'aide de la bibliothèque python "ModernGL". Celle-ci permet de faire du rendu à l'aide d'OpenGL.
 
-Le rubik's cube est décomposé en 81 petits cubes qui sont déplacés à l'aide de la matrice de translation.
-Ensuite, lorsqu'une rotation est effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
-Le fait d'effectuer la translation puis la rotation, cela veut dire que le centre de rotation d'un cube est en fait le centre de rotation du rubik's.
+Le rubik's cube est décomposé en 27 petits cubes qui sont déplacés à l'aide de la matrice de translation.
+Ensuite, lorsqu'une rotation doit être effectuée sur une face du rubik's cube, on applique une matrice de rotation pour chaque cube de cette face.
+Le fait d'appliquer la translation puis la rotation, les cubes de la face vont être pivotés en fonction du décalage. Voici en image le principe:
+
+![Principe translation-rotation](./images/principe_rotation.png){width=100%}
+
 Cela simplifie le positionnement des cubes dans l'espace lors des rotations des faces.
 
 Pour garder la trace de chaque cube au bon endroit, un tableau avec 3 dimensions est utilisé.
@@ -190,6 +193,8 @@ Une fois les 6 faces scannées, on peut voir la simulation 3D du rubik's cube s'
 
 # Résultats
 
+TODO:
+
 # Améliorations
 
 Le programme actuelle est fonctionnelle mais l'efficacité serait grandement meilleure avec quelques améliorations.
@@ -200,21 +205,34 @@ Idéalement, il faudrait reconnaitre les images avec un algorithme type machine 
 
 ## Identification des faces du rubik's cube
 
-La méthode utilisée fonctionne très bien mais nécessite d'avoir un arrière-plan uniforme.
+Ce projet est fonctionnel mais étant restreint au niveau du temps nous n'avons pas pu réaliser toutes améliorations que nous aurions aimé. Voici quelqu'unes des améliorations auxquelles nous avons pensé.
 
-- TODO: Améliorations partie Bastien
+## Identification d'une face du cube
+
+La détection du cube nécessite d'avoir un fond uni afin de bien fonctionner. La sélection des lignes représentant le pourtours du cube consiste pour l'instant à prendre les lignes les plus à l'extérieur. Une amélioration possible consisterait à identifier le plus grand carré. Ceci permetterai ainsi d'éviter qu'une ligne parasite ne viennent perturber l'extraction d'une face.
+
+## Détection des couleurs
+
+Le système actuel est très sensible à la luminosité ambiante et certaines couleurs peuvent être confondues. Une idée d'améliorations consisterait à scaner les faces les unes après les autres et d'ajuster la reconnaissances des couleurs au fur et à mesure du scan. Une fois toutes les faces scannées, on porrait ainsi utiliser de l'IA afin de répartir toutes les couleurs scannées en 6 catégories représentant chacune une couleur du cube. Cette technique permetterait ainsi de diminuer notre sensibilité à la luminosité.
+
+## Reconstruction du cube
+
+La reconstruction du cube actuelle ne fonctionne que si les scan de toutes la faces a été effectuée et est 100% correct. Il serait intéressant d'améliorer le système afin de pouvoir détecter et voir même corriger certaines couleurs manquantes ou incorrectes.
 
 ## Affichage du rubik's cube
 
-TODO: Malik petit text
+L'affichage du rubik's cube est correct et fonctionnel. Cependant, il peut être améliorable d'un point de vue ergonomique. Voici quelques idées:
 
 - Ajouter une animation de rotation des faces sur le cube en 3D
-- Ajouter une slider pour naviguer dans la ...TODO:
+- Ajouter une slider pour naviguer dans les différentes étapes de résolution du rubik's cube
 
 # Conclusion
+
+TODO:
 
 \newpage
 
 \listoffigures
 
 # References
+
