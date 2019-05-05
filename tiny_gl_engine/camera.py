@@ -11,19 +11,19 @@ import numpy
 import math
 import pyrr
 
+
 class Camera:
     def __init__(self, fov, aspect, near, far):
         """ Init camera """
         self.create_perspective_matrix(fov, aspect, near, far)
         self.create_view_matrix()
 
-
     def cotan(self, value):
         """ Math cotan """
         return math.cos(value) / math.sin(value)
 
-
     def create_perspective_matrix(self, fov, aspect, near, far):
+<<<<<<< HEAD
         """ Create the perspective matrix """
         perspective = pyrr.matrix44.create_perspective_projection_matrix(fov, aspect, near, far)
         self.perspective = perspective
@@ -33,15 +33,23 @@ class Camera:
         eye = numpy.array([0.0,0.0,10.0])
         target = numpy.array([0.0,0.0,0.0])
         up = numpy.array([0.0,1.0,0.0])
+=======
+        perspective = pyrr.matrix44.create_perspective_projection_matrix(
+            fov, aspect, near, far)
+        self.perspective = perspective
+
+    def create_view_matrix(self):
+        eye = numpy.array([0.0, 0.0, 10.0])
+        target = numpy.array([0.0, 0.0, 0.0])
+        up = numpy.array([0.0, 1.0, 0.0])
+>>>>>>> 0e2cf85e4892b601f6e3c033206fd46cf874f8f4
         view = pyrr.matrix44.create_look_at(eye, target, up)
         self.initial_view = self.view = view
-
 
     def apply_view_perspective(self, prog):
         """ Apply the current matrices to the shader """
         prog['uVMatrix'].value = tuple(self.view.flatten())
         prog['uPMatrix'].value = tuple(self.perspective.flatten())
-
 
     def move(self, dx, dy):
         """ Move the camera on y and x axis """
@@ -51,7 +59,6 @@ class Camera:
         rotation = pyrr.matrix44.multiply(h_rotation, v_rotation)
         final_view = pyrr.matrix44.multiply(rotation, self.initial_view)
         self.view = final_view
-
 
     def setup_shader(self, prog):
         """ Set a new shader and apply the matrices """
