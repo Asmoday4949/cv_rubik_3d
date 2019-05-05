@@ -1,3 +1,4 @@
+import kociemba
 import numpy as np
 import cv2 as cv
 import sys
@@ -7,7 +8,8 @@ from reconstruct import reconstruct
 from face_detection import detect_lines
 from tiny_gl_engine.open_gl_app import OpenGLApp
 
-def detect_faces(square_zone = None):
+
+def detect_faces(square_zone=None):
 
     faces = []
     faces_in = set()
@@ -23,13 +25,12 @@ def detect_faces(square_zone = None):
     while len(faces_in) < 6:
         ret, img = cap.read()
 
-
         img = detect_lines(img)
 
         if square_zone == None and not img is None:
-            square_zone = [[0,0], img.shape[0]]
+            square_zone = [[0, 0], img.shape[0]]
 
-        #print(faces)
+        # print(faces)
 
         if not img is None and can_detect_color:
             face = detect_color(img, square_zone)
@@ -44,7 +45,6 @@ def detect_faces(square_zone = None):
                     print("New face detected", middle)
                     can_detect_color = False
                     print(faces_in)
-                
 
             if img.size == 0:
                 raise Exception(-1)
@@ -61,8 +61,6 @@ def detect_faces(square_zone = None):
     return faces
 
 
-import kociemba
-
 def rubik_cv():
     faces = detect_faces()
     print(faces)
@@ -73,6 +71,7 @@ def rubik_cv():
 
     gl_app = OpenGLApp(solution)
     gl_app.run()
+
 
 if __name__ == '__main__':
     rubik_cv()

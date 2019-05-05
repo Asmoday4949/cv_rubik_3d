@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+"""face_detection.py: Identify a face of a rubik's cube in an image"""
+
+__author__ = "Lucas Bulloni, Malik Fleury, Bastien Wermeille"
+__version__ = "1.0.0"
+
+
 import cv2
 import numpy as np
 from collections import defaultdict
@@ -138,7 +147,7 @@ def length(line):
     ----------
     line : np.ndarray
         A line in endpoint form.
-    
+
     Returns
     -------
     length : float
@@ -228,7 +237,7 @@ def create_line(*args):
     >>> x1, y1, x2, y2 = 0, 0, 500, 500
     >>> create_line(x1, y1, x2, y2)
     array([[  0,   0, 500, 500]])
-    
+
     """
     if len(args) == 2:
         return create_line_rhotheta(*args)
@@ -251,12 +260,13 @@ def point_line_dist(point, line):
         line = convert(line)
     for x1, y1, x2, y2 in line:
         for x0, y0 in point:
-            numerator = abs((y2 - y1) * x0 - (x2 - x1) * y0 + x2 * y1 - y2 * x1)
+            numerator = abs((y2 - y1) * x0 - (x2 - x1)
+                            * y0 + x2 * y1 - y2 * x1)
             denominator = length(line)
             if denominator < 1:
                 #print("Error: line length less than a single pixel.")
                 return 0
-                #return ERRORVAL
+                # return ERRORVAL
     return numerator / denominator
 
 
@@ -282,7 +292,7 @@ def endpoint(line, bbox=[0, 0, 1e5, 1e5]):
         lines of the bounding box. Only the two points touching the 
         border of the bounding box are returned. For a specific image
         height and width, set bbox=[0, 0, w, h].
-    
+
     Returns
     -------
     line : np.ndarray
@@ -315,7 +325,7 @@ def rhotheta(line):
     ----------
     line : np.ndarray
         A line in endpoint form.
-    
+
     Returns
     -------
     line : np.ndarray
@@ -347,7 +357,7 @@ def convert(line, bbox=[0, 0, 1e5, 1e5]):
         lines of the bounding box. Only the two points touching the 
         border of the bounding box are returned. For a specific image
         height and width, set bbox=[0, 0, w, h].
-    
+
     Returns
     -------
     line : np.ndarray
@@ -475,7 +485,8 @@ def segment_angle_range(lines, step=np.pi / 2):
     angle_cuts = np.arange(step / 2, np.pi, step=step)
     segmented = defaultdict(list)
     for line in lines:
-        angle_bin = bisect(angle_cuts, lineangle(line) % np.pi) % len(angle_cuts)
+        angle_bin = bisect(angle_cuts, lineangle(line) %
+                           np.pi) % len(angle_cuts)
         segmented[angle_bin].append(line)
     segmented = list(segmented.values())
     return segmented
@@ -508,7 +519,8 @@ def rhotheta_intersection(line1, line2, tolerance=1e-6, subpixel=False):
         return [[ERRORVAL, ERRORVAL]]
 
     # Ax = b    linear system
-    A = np.array([[np.cos(theta1), np.sin(theta1)], [np.cos(theta2), np.sin(theta2)]])
+    A = np.array([[np.cos(theta1), np.sin(theta1)],
+                  [np.cos(theta2), np.sin(theta2)]])
     b = np.array([[rho1], [rho2]])
     x0, y0 = np.linalg.solve(A, b)
 

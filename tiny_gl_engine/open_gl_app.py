@@ -9,6 +9,7 @@ from tiny_gl_engine.primitives.cube import *
 from tiny_gl_engine.rubiks_cube import *
 from tiny_gl_engine.camera import *
 
+
 class OpenGLApp:
     def __init__(self, rules):
         self.init_screen()
@@ -25,7 +26,8 @@ class OpenGLApp:
         self.running = True
         pygame.init()
         pygame.display.set_caption('Rubik\'s Cube')
-        self.screen = pygame.display.set_mode(self.size, pygame.OPENGL | pygame.DOUBLEBUF)
+        self.screen = pygame.display.set_mode(
+            self.size, pygame.OPENGL | pygame.DOUBLEBUF)
 
     def init_keys(self):
         self.SPEED = 40
@@ -51,7 +53,7 @@ class OpenGLApp:
         while self.running == True:
             for event in pygame.event.get():
                 self.handle_keys_event(event)
-            context.clear(0.0,0.0,0.0)
+            context.clear(0.0, 0.0, 0.0)
             cube.render()
             pygame.display.flip()
         pygame.quit()
@@ -71,7 +73,8 @@ class OpenGLApp:
             self.start_pos = event.pos
             self.start_time = time.time()
         if event.type == MOUSEMOTION and self.mouse_pressed:
-            delta_pos = (event.pos[0] - self.start_pos[0], event.pos[1] - self.start_pos[1])
+            delta_pos = (event.pos[0] - self.start_pos[0],
+                         event.pos[1] - self.start_pos[1])
             current_time = time.time()
             elapsed_time = current_time - self.start_time
             self.start_pos = event.pos
@@ -95,7 +98,7 @@ class OpenGLApp:
         return inversed_orders
 
     def previous(self):
-        orders = self.reversed_orders;
+        orders = self.reversed_orders
         if self.current_index > 0:
             self.current_index -= 1
             order = orders[self.current_index]
@@ -113,22 +116,22 @@ class OpenGLApp:
         cube = self.cube
 
         if order == 'F2':
-            for i in range(0,2):
+            for i in range(0, 2):
                 cube.rotate_z(2, True)
         if order == 'R2':
-            for i in range(0,2):
+            for i in range(0, 2):
                 cube.rotate_x(2, True)
         if order == 'U2':
-            for i in range(0,2):
+            for i in range(0, 2):
                 cube.rotate_y(2, True)
         if order == 'L2':
-            for i in range(0,2):
+            for i in range(0, 2):
                 cube.rotate_x(0, False)
         if order == 'B2':
-            for i in range(0,2):
+            for i in range(0, 2):
                 cube.rotate_z(0, False)
         if order == 'D2':
-            for i in range(0,2):
+            for i in range(0, 2):
                 cube.rotate_y(0, False)
 
         if order == 'F':
@@ -157,10 +160,10 @@ class OpenGLApp:
         if order == 'D\'':
             cube.rotate_y(0, True)
 
-
     def load_shaders(self):
         context = self.context
-        self.prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/cube_vertex.glsl', 'tiny_gl_engine/primitives/shaders/cube_fragment.glsl')
+        self.prog = load_shaders(context, 'tiny_gl_engine/primitives/shaders/cube_vertex.glsl',
+                                 'tiny_gl_engine/primitives/shaders/cube_fragment.glsl')
 
     def build_camera(self):
         size = self.size
@@ -178,8 +181,9 @@ class OpenGLApp:
         cube = Cube(self.context)
         cube.setup_shader(self.prog)
         cube.create_geometry()
-        #cube.apply_model()
+        # cube.apply_model()
         self.cube = cube
+
 
 if __name__ == '__main__':
     app = OpenGLApp()

@@ -3,18 +3,19 @@ import cv2 as cv
 from color_enum import Color
 import os
 
+
 def detect_color(image, square_zone):
     MARGIN = 20
-    result = np.full([3,3], -1)
+    result = np.full([3, 3], -1)
     width_one_square = square_zone[1] // 3
     sub_zone = [square_zone[0].copy(), width_one_square]
     result = []
 
-    for i in range(0,3):
+    for i in range(0, 3):
         sub_zone[0][0] = square_zone[0][0]
         result.append([])
 
-        for j in range(0,3):
+        for j in range(0, 3):
             start_width = sub_zone[0][1] + MARGIN
             end_width = sub_zone[0][1] + sub_zone[1] - MARGIN
 
@@ -26,12 +27,12 @@ def detect_color(image, square_zone):
             bgr_mean, deviation = get_bgr_value_subimage(subimage, np.mean)
             #bgr_mean, deviation = get_bgr_value_subimage(subimage, np.median)
 
-            #if deviation > 10:
+            # if deviation > 10:
             #    print("hello")
             #    return None
 
             color = decide_color(bgr_mean)
-            
+
             result[i].append(decide_color(bgr_mean))
 
             cv.imshow(f"{i}:{j}", subimage)
@@ -43,6 +44,7 @@ def detect_color(image, square_zone):
 
     return result
 
+
 def draw_square(image, zone):
     color = (0, 0, 0)
     pt1 = tuple(zone[0])
@@ -50,10 +52,12 @@ def draw_square(image, zone):
 
     cv.rectangle(image, pt2, pt1, color, 2)
 
-def decide_color(bgr_value):
-    hsv_value = np.squeeze(np.asarray(cv.cvtColor(np.uint8([[bgr_value]]), cv.COLOR_BGR2HSV)))
 
-    if bgr_value.mean() > 150 and np.std(bgr_value) < 40 :
+def decide_color(bgr_value):
+    hsv_value = np.squeeze(np.asarray(cv.cvtColor(
+        np.uint8([[bgr_value]]), cv.COLOR_BGR2HSV)))
+
+    if bgr_value.mean() > 150 and np.std(bgr_value) < 40:
         return Color.WHITE
     elif hsv_value[0] > 90 and hsv_value[0] < 120:
         return Color.BLUE
@@ -70,12 +74,13 @@ def decide_color(bgr_value):
     #print(hsv_value, bgr_value)
     return None
 
+
 def get_bgr_value_subimage(subimage, math_func):
     bgr_mean = np.empty((3,))
     deviation = 0
 
-    for i in range(0,3):
-        bgr_mean[i] = math_func(subimage[:,:,i])
+    for i in range(0, 3):
+        bgr_mean[i] = math_func(subimage[:, :, i])
 
     grayscale = cv.cvtColor(subimage, cv.COLOR_RGB2GRAY)
     deviation = np.std(grayscale)
